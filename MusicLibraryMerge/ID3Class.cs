@@ -1,16 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.WindowsRuntime;
+//using System.Diagnostics;
+//using System.Linq;
+//using System.Runtime.InteropServices;
+//using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 /* https://id3.org/Developer%20Information*/
 namespace MusicLibraryMerge
 {
 	class ID3Class
 	{
+
+		//add a frame
+
+		//name as string convert to bytes
+		//length as int32 convert to bytes
+		//flags as bool convert to bytes
+		//if text and unicode set unicode flag
+		//content as string convert to bytes
+		//OR
+		//content as bytes convert to string
+
 		private List<ID3Frame> _lcllistframes;
 		private ID3Header _id3h;
 		private ID3ExtendedHeader _id3exh;
@@ -21,7 +32,7 @@ namespace MusicLibraryMerge
 		private System.IO.FileStream _lclfsw;
 		private System.IO.BinaryWriter _lclbw;
 		private System.String _encodingname = "ISO-8859-1";
-		private System.String backupext = ".bkp";
+		//private System.String backupext = ".bkp";
 		private System.String tempext = ".tmp";
 
 		public ID3Class()
@@ -82,21 +93,19 @@ namespace MusicLibraryMerge
 		{
 			get { return _lcllistframes; }
 		}
-		private byte[] BigEndIntToByteArray(int thisint)
+		public ID3Frame FindFirstFrame(string lcltag)
 		{
-			return BigEndIntToByteArray(thisint, 0, 3);
-		}
-		private byte[] BigEndIntToByteArray(int thisint, int startbyte, int lastbyte)
-		{
-			byte[] retbytes = new byte[lastbyte + 1];
-			for (int ii = lastbyte; ii >= startbyte; ii--)
+			ID3Frame newframe = null;
+			foreach (ID3Frame thisframe in _lcllistframes)
 			{
-				retbytes[ii] = (byte)(thisint & 0xff);
-				thisint >>= 8;
+				if (thisframe.Name.Equals(lcltag))
+				{
+					newframe = thisframe;
+					break;
+				}
 			}
-			return retbytes;
+			return newframe;
 		}
-
 		private Int32 BigEndByteArrayToInt(byte[] thesebytes)
 		{
 			return BigEndByteArrayToInt(thesebytes, 0, thesebytes.GetUpperBound(0));
@@ -116,12 +125,55 @@ namespace MusicLibraryMerge
 			}
 			return thisint;
 		}
-		public bool IsBitSet(byte thisbyte, int whichbit)
+		private byte[] BigEndIntToByteArray(int thisint)
+		{
+			return BigEndIntToByteArray(thisint, 0, 3);
+		}
+		private byte[] BigEndIntToByteArray(int thisint, int startbyte, int lastbyte)
+		{
+			byte[] retbytes = new byte[lastbyte + 1];
+			for (int ii = lastbyte; ii >= startbyte; ii--)
+			{
+				retbytes[ii] = (byte)(thisint & 0xff);
+				thisint >>= 8;
+			}
+			return retbytes;
+		}
+		public bool IsBitSet(int thisint, int whichbit)
 		{
 			bool isset = false;
-			if ((thisbyte & (0x01 << whichbit)) != 0x0) { isset = true; }
+			if ((thisint & (0x01 << whichbit)) != 0x0) { isset = true; }
 			return isset;
 		}
+		public int SetBit(int thisint, int whichbit, int retsize = 1)
+		{
+			int retvalue = 0;
+			switch (retsize)
+			{
+				case (4):
+					{
+						retvalue = ((int)thisint ^ (0x1 << whichbit) & 0xffff);
+						break;
+					}
+				case (3):
+					{
+						retvalue = ((int)thisint ^ (0x1 << whichbit) & 0xfff);
+						break;
+					}
+				case (2):
+					{
+						retvalue = ((int)thisint ^ (0x1 << whichbit) & 0xff);
+						break;
+					}
+				case (1):
+					{
+						retvalue = ((int)thisint ^ (0x1 << whichbit) & 0xf);
+						break;
+					}
+			}
+			return retvalue;
+		}
+
 		public void ReadMetaData()
 		{
 			char[] lclchar;
@@ -181,28 +233,27 @@ namespace MusicLibraryMerge
 
 							if (id3f.IsText)
 							{
-								//if first char is 0x00 then it should be Unicode
+								//if first char is 0x01 then it should be Unicode
 								lclbyte = new byte[1];
-								lclbyte[0] = _lclbr.ReadByte();
+								lclbyte[0] = _lclbr.ReadByte();//if the first byte read is $01 then it's unicode!
 								id3f.UnicodeFlag = (lclbyte[0] == 1);
 								if (id3f.UnicodeFlag)
 								{
-									lclbyte = new byte[id3f.Length - 1];//if the first byte read is $01 then it's unicode!
-									lclbyte = _lclbr.ReadBytes(id3f.Length - 1);// read the frame content
-									id3f.ContentBytes = lclbyte;
-									id3f.ContentString = System.Text.UnicodeEncoding.Unicode.GetString(lclbyte);
+									lclbyte = new byte[2];
+									lclbyte = _lclbr.ReadBytes(2);
+									id3f.UnicodeBOM = lclbyte;
+									lclbyte = new byte[id3f.Length - 3];
 								}
 								else
 								{
-									lclbyte = new byte[id3f.Length - 1];//if the first byte read is $01 then it's unicode!
-									lclbyte = _lclbr.ReadBytes(id3f.Length - 1);// read the frame content
-									id3f.ContentBytes = lclbyte;
-									id3f.ContentString = System.Text.Encoding.GetEncoding(_encodingname).GetString(lclbyte);
+									lclbyte = new byte[id3f.Length - 1];
 								}
+								lclbyte = _lclbr.ReadBytes(lclbyte.Length);// read the frame content
+								id3f.ContentBytes = lclbyte;
 							}
 							else
 							{
-								lclbyte = new byte[id3f.Length];//if the first byte read is $01 then it's unicode!
+								//lclbyte = new byte[id3f.Length];//if the first byte read is $01 then it's unicode!
 								lclbyte = _lclbr.ReadBytes(id3f.Length);// read the frame content
 								id3f.ContentBytes = lclbyte;
 							}
@@ -236,13 +287,26 @@ namespace MusicLibraryMerge
 			lclbytes = _lclbr.ReadBytes((int)(_lclbr.BaseStream.Length - _id3h.StartOfAudio));
 			return lclbytes;
 		}
-		public void WriteMetaData()
+		public void WriteMetaData(string newfile = "")
 		{
 			if (_lclfileinfo != null)
 			{
 				//open writefile
 				//string destfilename = _lclfileinfo.FullName;
-				string writefilename = _lclfilename + tempext;
+				System.Text.StringBuilder sb = new System.Text.StringBuilder();
+				string writefilename  = System.String.Empty;
+				if (!System.String.IsNullOrEmpty(newfile))
+				{
+					writefilename = newfile;
+				}
+				else
+				{
+					writefilename = _lclfilename + tempext;
+				}
+				if(!System.IO.Directory.Exists(System.IO.Path.GetDirectoryName(writefilename)))
+				{
+					System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(writefilename));
+				}
 				if (System.IO.File.Exists(writefilename))
 				{
 					System.IO.File.Delete(writefilename);
@@ -257,9 +321,9 @@ namespace MusicLibraryMerge
 				_lclbw = new System.IO.BinaryWriter(_lclfsw);
 
 				//write header
-				_lclbw.Write(_id3h.ID, 0, _id3h.ID.Count());
-				_lclbw.Write(_id3h.Version, 0, _id3h.Version.Count());
-				_lclbw.Write(_id3h.FlagBytes, 0, _id3h.FlagBytes.Count());
+				_lclbw.Write(_id3h.ID, 0, _id3h.ID.Length);
+				_lclbw.Write(_id3h.Version, 0, _id3h.Version.Length);
+				_lclbw.Write(_id3h.FlagBytes, 0, _id3h.FlagBytes.Length);
 				_lclbw.Write(_id3h.Set4ByteLength(_id3h.Length), 0, 4);
 				if (_id3h.ExtendedHeaderFlag)
 				{
@@ -268,24 +332,27 @@ namespace MusicLibraryMerge
 				//write each frame
 				foreach (ID3Frame lclframe in _lcllistframes)
 				{
-					_lclbw.Write(lclframe.NameBytes, 0, lclframe.NameBytes.Count());
+					_lclbw.Write(lclframe.NameBytes, 0, lclframe.NameBytes.Length);
 					_lclbw.Write(BigEndIntToByteArray(lclframe.Length), 0, 4);
-					_lclbw.Write(lclframe.Flags, 0, lclframe.Flags.Count());
+					_lclbw.Write(lclframe.Flags, 0, lclframe.Flags.Length);
 					if (lclframe.IsText)
 					{
 						_lclbw.Write(lclframe.UnicodeFlag);
+						if (lclframe.UnicodeFlag)
+						{
+							_lclbw.Write(lclframe.UnicodeBOM);
+						}
 					}
-					_lclbw.Write(lclframe.ContentBytes, 0, lclframe.ContentBytes.Count());
+					_lclbw.Write(lclframe.ContentBytes, 0, lclframe.ContentBytes.Length);
 				}
 				//write padding
 				//write audio
 				_lclbw.BaseStream.Seek(_id3h.StartOfAudio, System.IO.SeekOrigin.Begin);
-				_lclbw.Write(Audio(), 0, Audio().Count());
+				_lclbw.Write(Audio(), 0, Audio().Length);
 				//close readfile
-				CloseFile();
+				//CloseFile();
 
-				//rename readfile for backup then rename writefile to readfile
-				_lclfileinfo = writefileinfo.Replace(_lclfilename, _lclfilename + backupext, false);
+				//_lclfileinfo = writefileinfo.Replace(_lclfilename, sb.ToString(), false);
 				//close writefile
 				_lclbw.Close();
 				_lclbw.Dispose();
@@ -293,10 +360,16 @@ namespace MusicLibraryMerge
 				_lclfsw.Close();
 				_lclfsw.Dispose();
 				_lclfsw = null;
-				_lclfileinfo = null;
 
-				//reopen readfile
-				OpenFile(_lclfilename);
+				//rename readfile for backup then rename writefile to readfile
+				//sb.Clear();
+				//sb.Append(System.IO.Path.GetDirectoryName(_lclfilename) + System.IO.Path.DirectorySeparatorChar);
+				//sb.Append(System.IO.Path.GetFileNameWithoutExtension(_lclfilename));
+				//sb.Append(backupext);
+				//sb.Append(System.IO.Path.GetExtension(_lclfilename));
+
+
+				//leave open readfile
 			}
 
 			return;

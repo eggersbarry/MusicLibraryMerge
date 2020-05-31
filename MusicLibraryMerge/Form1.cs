@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Diagnostics.PerformanceData;
+using System.IO;
+//using System.Data.SqlClient;
+//using System.Diagnostics.PerformanceData;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -10,7 +11,8 @@ namespace MusicLibraryMerge
 {
 	public partial class Form1 : Form
 	{
-
+		private int _whichfolder = 2;
+		private int max_path = 260;
 		public Form1()
 		{
 			InitializeComponent();
@@ -247,15 +249,10 @@ namespace MusicLibraryMerge
 			Cursor oldcursor = Cursor;
 			Cursor = Cursors.WaitCursor;
 			rtb1.Clear();
-			rtb1.Lines = DoMerge().ToArray();
+			rtb1.Lines = DoFixMetaData().ToArray();
 			Cursor = oldcursor;
 		}
-		private List<string> DoMerge()
-		{
-			//			return DoMerge(0);
-			return DoMerge(1);
-		}
-		private List<string> DoMerge(int forwhich)
+		private List<string> DoFixMetaData()
 		{
 			string thispath = tbfirstfolder.Text;
 			string putpath = tbsecondfolder.Text;
@@ -268,18 +265,117 @@ namespace MusicLibraryMerge
 			string submask = GetSubMask();
 			string album;
 			string artist;
-			//string genre;
-			//string year;
-			//string track;
 			string songname;
 			string[] mdata;
 			string newfile;
-			string newdir;
 			string ext;
 			string filefullpath;
 			string filepath;
 			string fulldirname;
 			string thisfilename;
+			ID3Frame lclframe;
+			string didwhat = System.String.Empty;
+			int copied = 0, skipped = 0, notcopied = 0, tmpint = 0; ;
+
+			sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask));
+			sb1.Sort();
+			rtb1.Lines = sb1.ToArray();
+			ShowFound(sb1.Count);
+			foreach (string thisfile in sb1)
+			{
+				ext = System.IO.Path.GetExtension(thisfile);
+				filefullpath = System.IO.Path.GetFullPath(thisfile);
+				filepath = System.IO.Path.GetPathRoot(thisfile);
+				fulldirname = System.IO.Path.GetDirectoryName(thisfile);
+				thisfilename = System.IO.Path.GetFileNameWithoutExtension(thisfile);
+				rtb1.Text = string.Format("{0:d} of {1:d}  {2:s}", sb2.Count, sb1.Count, thisfile);
+				rtb1.Refresh();
+				Application.DoEvents();
+				if (System.IO.Path.GetExtension(thisfile).ToUpper().Equals(md.MP3Extension))
+				{
+					newfile = thisfile.Replace(thispath, putpath);
+					if (newfile.Length < max_path)
+					{
+						mdata = thisfile.Remove(0, thispath.Length).Split(new char[] { System.IO.Path.DirectorySeparatorChar }, System.StringSplitOptions.RemoveEmptyEntries);
+						if (mdata.GetUpperBound(0) == 2)
+						{
+							artist = mdata[0];
+							album = mdata[1];
+							songname = mdata[2].Substring(0, mdata[2].Length - (ext.Length));
+							if (int.TryParse(songname.Substring(0, 2), out tmpint))
+							{
+								songname = songname.Remove(0, 3);
+							}
+
+							ID3Class myid3 = new ID3Class(thisfile);
+							myid3.ReadMetaData();
+
+							lclframe = myid3.FindFirstFrame("TALB");// album name
+							if (lclframe == null)
+							{
+								lclframe = new ID3Frame(myid3);
+								lclframe.Name = "TALB";
+								myid3.FrameList.Add(lclframe);
+							}
+							lclframe.UnicodeFlag = true;
+							lclframe.ContentString = album;
+							//use the following if you don't want Unicode in the metadata
+							//lclframe.UnicodeFlag = false;
+							//lclframe.ContentBytes = System.Text.Encoding.GetEncoding(myid3.EncodingName).GetBytes("Barry's " + album);
+
+							lclframe = myid3.FindFirstFrame("TIT2"); // Song title
+							if (lclframe == null)
+							{
+								lclframe = new ID3Frame(myid3);
+								lclframe.Name = "TIT2";
+								myid3.FrameList.Add(lclframe);
+							}
+							lclframe.UnicodeFlag = true;
+							lclframe.ContentString = songname;
+
+							lclframe = myid3.FindFirstFrame("TPE2");// album artist
+							if (lclframe == null)
+							{
+								lclframe = new ID3Frame(myid3);
+								lclframe.Name = "TPE2";
+								myid3.FrameList.Add(lclframe);
+							}
+							lclframe.UnicodeFlag = true;
+							lclframe.ContentString = artist;
+
+							myid3.WriteMetaData(newfile);
+							myid3.CloseFile();
+							sb2.Add("-> Copied " + newfile);
+							copied++;
+						}
+					}
+					else
+					{
+						System.Windows.Forms.MessageBox.Show("Manually handle - FilePath Too Long " + newfile);
+						sb2.Add("Manually handle - FilePath Too Long " + newfile);
+						skipped++;
+					}
+				}
+			}
+			sb2.Add(string.Format("{0:d} of {1:d} ---- copied={2:d} skipped={3:d} errored={4:d}", sb2.Count, sb1.Count, copied, skipped, notcopied));
+			return sb2;
+		}
+		private List<string> CopyFiles()
+		{
+			string thispath = tbfirstfolder.Text;
+			string putpath = tbsecondfolder.Text;
+			MyDir1 md = new MyDir1();
+			List<string> sb1 = new List<string>();
+			List<string> sb2 = new List<string>();
+			string ignoremask = GetIgnoreMask();
+			string findmask = GetFindMask();
+			string newfile = System.String.Empty;
+			string newdir = System.String.Empty;
+			string ext = System.String.Empty;
+			string filefullpath = System.String.Empty;
+			string filepath = System.String.Empty;
+			string fulldirname = System.String.Empty;
+			string thisfilename = System.String.Empty;
 			string didwhat = System.String.Empty;
 			int copied = 0, skipped = 0, notcopied = 0;
 
@@ -297,71 +393,56 @@ namespace MusicLibraryMerge
 				rtb1.Text = string.Format("{0:d} of {1:d}  {2:s}", sb2.Count, sb1.Count, thisfile);
 				rtb1.Refresh();
 				Application.DoEvents();
-				switch (forwhich)
+				newfile = putpath + thisfile.Remove(0, thispath.Length);
+				if (newfile.Length < max_path)
 				{
-					case (1):
+					didwhat = "START";
+					try
+					{
+						newdir = fulldirname.Replace(thispath, putpath);
+						if (!System.IO.Directory.Exists(newdir))
 						{
-							mdata = thisfile.Remove(0, thispath.Length).Split(new char[] { System.IO.Path.DirectorySeparatorChar }, System.StringSplitOptions.RemoveEmptyEntries);
-							if (mdata.GetUpperBound(0) == 2)
-							{
-								artist = mdata[0];
-								album = mdata[1];
-								songname = mdata[2].Substring(0, mdata[2].Length - (ext.Length));
-								newfile = putpath + System.IO.Path.DirectorySeparatorChar + album + System.IO.Path.DirectorySeparatorChar + mdata[2];
-
-								ID3Class myid3 = new ID3Class(thisfile);
-								myid3.ReadMetaData();
-								myid3.WriteMetaData();
-								myid3.CloseFile();
-								sb2.Add("-> Copied " + newfile);
-								copied++;
-							}
-							break;
+							System.IO.Directory.CreateDirectory(newdir);
 						}
-					default:
+						if (!System.IO.File.Exists(newfile))
 						{
-							newfile = putpath + thisfile.Remove(0, thispath.Length);
-							didwhat = "START";
-							try
-							{
-								newdir = fulldirname.Replace(thispath, putpath);
-								if (!System.IO.Directory.Exists(newdir))
-								{
-									System.IO.Directory.CreateDirectory(newdir);
-								}
-								if (!System.IO.File.Exists(newfile))
-								{
-									System.IO.File.Copy(thisfile, newfile);
-									didwhat = "=> Copied ";
-									copied++;
-								}
-								else
-								{
-									skipped++;
-									didwhat = "++ Skipped ";
-								}
-							}
-							catch (Exception ee)
-							{
-								didwhat = "**NOT COPIED " + ee.Message + " ";
-								notcopied++;
-							}
-							finally
-							{
-								sb2.Add(didwhat + newfile);
-							}
-							break;
+							System.IO.File.Copy(thisfile, newfile);
+							didwhat = "=> Copied ";
+							copied++;
 						}
+						else
+						{
+							skipped++;
+							didwhat = "++ Skipped ";
+						}
+					}
+					catch (Exception ee)
+					{
+						didwhat = "**NOT COPIED " + ee.Message + " ";
+						notcopied++;
+					}
+					finally
+					{
+						sb2.Add(didwhat + newfile);
+					}
 				}
-
-
+				else
+				{
+					System.Windows.Forms.MessageBox.Show("Manually handle - FilePath Too Long " + newfile);
+					sb2.Add("Manually handle - FilePath Too Long " + newfile);
+				}
 			}
 			sb2.Add(string.Format("{0:d} of {1:d} ---- copied={2:d} skipped={3:d} errored={4:d}", sb2.Count, sb1.Count, copied, skipped, notcopied));
 			return sb2;
 		}
+
 		private List<string> DoTrim()
 		{
-			string thispath = tbfirstfolder.Text;
+			string thispath = System.String.Empty;
+			if (_whichfolder == 2)
+			{ thispath = tbsecondfolder.Text; }
+			if (_whichfolder == 1)
+			{ thispath = tbfirstfolder.Text; }
 			MyDir1 md = new MyDir1();
 			List<string> sb1 = new List<string>();
 			List<string> sb2 = new List<string>();
@@ -382,7 +463,11 @@ namespace MusicLibraryMerge
 		}
 		private List<string> DoReplace()
 		{
-			string thispath = tbfirstfolder.Text;
+			string thispath = System.String.Empty;
+			if (_whichfolder == 2)
+			{ thispath = tbsecondfolder.Text; }
+			if (_whichfolder == 1)
+			{ thispath = tbfirstfolder.Text; }
 			MyDir1 md = new MyDir1();
 			List<string> sb1 = new List<string>();
 			List<string> sb2 = new List<string>();
@@ -403,7 +488,11 @@ namespace MusicLibraryMerge
 		}
 		private List<string> DoRemoveBraces()
 		{
-			string thispath = tbfirstfolder.Text;
+			string thispath = System.String.Empty;
+			if (_whichfolder == 2)
+			{ thispath = tbsecondfolder.Text; }
+			if (_whichfolder == 1)
+			{ thispath = tbfirstfolder.Text; }
 			MyDir1 md = new MyDir1();
 			List<string> sb1 = new List<string>();
 			List<string> sb2 = new List<string>();
@@ -424,7 +513,11 @@ namespace MusicLibraryMerge
 		}
 		private List<string> DoEmptyFolders()
 		{
-			string thispath = tbfirstfolder.Text;
+			string thispath = System.String.Empty;
+			if (_whichfolder == 2)
+			{ thispath = tbsecondfolder.Text; }
+			if (_whichfolder == 1)
+			{ thispath = tbfirstfolder.Text; }
 			MyDir1 md = new MyDir1();
 			List<string> sb1 = new List<string>();
 			List<string> sb2 = new List<string>();
@@ -446,7 +539,11 @@ namespace MusicLibraryMerge
 
 		private List<string> DoFixDisc()
 		{
-			string thispath = tbfirstfolder.Text;
+			string thispath = System.String.Empty;
+			if (_whichfolder == 2)
+			{ thispath = tbsecondfolder.Text; }
+			if (_whichfolder == 1)
+			{ thispath = tbfirstfolder.Text; }
 			MyDir1 md = new MyDir1();
 			List<string> sb1 = new List<string>();
 			List<string> sb2 = new List<string>();
@@ -467,6 +564,40 @@ namespace MusicLibraryMerge
 			foreach (string thisfile in sb1)
 			{
 				sb2.Add(md.FixDiscFileName(thisfile, mask1));
+			}
+			sb1.AddRange(sb2);
+			return sb1;
+		}
+		private List<string> DoFixAttributes(string whichattributes)
+		{
+			string thispath = System.String.Empty;
+			if (_whichfolder == 2)
+			{ thispath = tbsecondfolder.Text; }
+			if (_whichfolder == 1)
+			{ thispath = tbfirstfolder.Text; }
+			MyDir1 md = new MyDir1();
+			List<string> sb1 = new List<string>();
+			List<string> sb2 = new List<string>();
+			//string replacemask = GetReplaceMask();
+			string ignoremask = GetIgnoreMask();
+			string findmask = GetFindMask();
+			//string submask = GetSubMask();
+			string mask1 = System.String.Empty;
+			sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask));
+			sb1.Sort();
+			rtb1.Lines = sb1.ToArray();
+			ShowFound(sb1.Count);
+			if (!System.String.IsNullOrEmpty(GetReplaceMask()))
+			{
+				mask1 = GetReplaceMask();
+			}
+			else
+			{
+				mask1 = whichattributes;
+			}
+			foreach (string thisfile in sb1)
+			{
+				sb2.Add(md.FixAttributes(thisfile, mask1));
 			}
 			sb1.AddRange(sb2);
 			return sb1;
@@ -502,7 +633,7 @@ namespace MusicLibraryMerge
 			Cursor = oldcursor;
 		}
 
-		private void btnbraces_Click(object sender, EventArgs e)
+		private void btnRemoveBetween_Click(object sender, EventArgs e)
 		{
 			Cursor oldcursor = Cursor;
 			Cursor = Cursors.WaitCursor;
@@ -517,6 +648,38 @@ namespace MusicLibraryMerge
 			rtb1.Lines = DoEmptyFolders().ToArray();
 			ShowFound(rtb1.Lines.Count());
 			Cursor = oldcursor;
+		}
+
+		private void btnCopyFiles_Click(object sender, EventArgs e)
+		{
+			Cursor oldcursor = Cursor;
+			Cursor = Cursors.WaitCursor;
+			rtb1.Lines = CopyFiles().ToArray();
+			ShowFound(rtb1.Lines.Count());
+			Cursor = oldcursor;
+		}
+
+		private void btnAttrib_Click(object sender, EventArgs e)
+		{
+			Cursor oldcursor = Cursor;
+			Cursor = Cursors.WaitCursor;
+			rtb1.Lines = DoFixAttributes("SystemHidden").ToArray();
+			ShowFound(rtb1.Lines.Count());
+			Cursor = oldcursor;
+		}
+
+		private void btnwhich_Click(object sender, EventArgs e)
+		{
+			if (btnwhich.Text.IndexOf("Start") > 0)
+			{
+				btnwhich.Text = "Use Dest Folder";
+				_whichfolder = 2;
+			}
+			else
+			{
+				btnwhich.Text = "Use Start Folder";
+				_whichfolder = 1;
+			}
 		}
 	}
 }

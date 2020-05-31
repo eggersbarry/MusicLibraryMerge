@@ -1,136 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+//using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 /*https://id3.org/Developer%20Information*/
 namespace MusicLibraryMerge
 {
 	public enum TEXTTAGS
 	{
-		TYER = 0,
-		TSSE,
-		TSRC,
-		TSIZ,
-		TRSO,
-		TRSN,
-		TPOS,
-		TPE4,
-		TPE3,
-		TPE2,
-		TPE1,
-		TOWN,
-		TORY,
-		TOPE,
-		TMED,
-/*
-DIG     Other digital media
-/A  Analog transfer from media
-ANA     Other analog media
-/WAC Wax cylinder
-/8CA 8-track tape cassette
-CD      CD
-/A Analog transfer from media
-/DD DDD
-/AD ADD
-/AA AAD
-LD      Laserdisc
-/A Analog transfer from media
-TT      Turntable records
-/33 33.33 rpm
-/45 45 rpm
-/71 71.29 rpm
-/76 76.59 rpm
-/78 78.26 rpm
-/80 80 rpm
-MD      MiniDisc
-/A Analog transfer from media
-DAT     DAT
-/A Analog transfer from media
-/1 standard, 48 kHz/16 bits, linear
-/2 mode 2, 32 kHz/16 bits, linear
-/3 mode 3, 32 kHz/12 bits, nonlinear, low speed
-/4 mode 4, 32 kHz/12 bits, 4 channels
-/5 mode 5, 44.1 kHz/16 bits, linear
-/6 mode 6, 44.1 kHz/16 bits, 'wide track' play
-DCC     DCC
-/A Analog transfer from media
-DVD     DVD
-/A Analog transfer from media
-TV      Television
-/PAL PAL
-/NTSC NTSC
-/SECAM SECAM
-VID     Video
-/PAL PAL
-/NTSC NTSC
-/SECAM SECAM
-/VHS VHS
-/SVHS S-VHS
-/BETA BETAMAX
-RAD     Radio
-/FM FM
-/AM AM
-/LW LW
-/MW MW
-TEL     Telephone
-/I ISDN
-MC      MC (normal cassette)
-/4 4.75 cm/s (normal speed for a two sided cassette)
-/9 9.5 cm/s
-/I Type I cassette (ferric/normal)
-/II Type II cassette (chrome)
-/III Type III cassette (ferric chrome)
-/IV Type IV cassette (metal)
-REE     Reel
-/9 9.5 cm/s
-/19 19 cm/s
-/38 38 cm/s
-/76 76 cm/s
-/I Type I cassette (ferric/normal)
-/II Type II cassette (chrome)
-/III Type III cassette (ferric chrome)
-/IV Type IV cassette (metal)*/
-		TLEN,
-		TLAN,
-		TFLT,
-/*
-MPG       MPEG Audio
-/1        MPEG 1/2 layer I
-/2        MPEG 1/2 layer II
-/3        MPEG 1/2 layer III
-/2.5      MPEG 2.5
-/AAC     Advanced audio compression
-VQF       Transform-domain Weighted Interleave Vector Quantization
-PCM       Pulse Code Modulated audio
-*/
-		TEXT,
-		TENC,
-		TCON,
-/*
-References to the ID3v1 genres can be made by, as first byte,
-enter "(" followed by a number from the genres list (appendix A)
-and ended with a ")" character. 
-This is optionally followed by a refinement,
-e.g. "(21)" or "(4)Eurodisco". Several references can be made in the same frame,
-e.g. "(51)(39)". 
-If the refinement should begin with a "(" character it should be 
-replaced with "((", e.g. "((I can figure out any genre)" or "(55)((I think...)". 
-The following new content types is defined in ID3v2 and is implemented in the same way
-as the numerig content types, e.g. "(RX)".
-RX    Remix
-CR    Cover
-*/
-		TCOM,
-		TBPM,
 		TALB,
-		TXXX
-/*
-<Header for 'User defined text information frame', ID: "TXXX">
-Text encoding    $xx
-Description    <text string according to encoding> $00 (00)
-Value    <text string according to encoding>
-*/
+		TBPM,
+		TCOM,
+		TCON,
+		TCOP,
+		TDAT,
+		TDLY,
+		TENC,
+		TEXT,
+		TFLT,
+		TIME,
+		TIT1,
+		TIT2,
+		TIT3,
+		TKEY,
+		TLAN,
+		TLEN,
+		TMED,
+		TOAL,
+		TOFN,
+		TOLY,
+		TOPE,
+		TORY,
+		TOWN,
+		TPE1,
+		TPE2,
+		TPE3,
+		TPE4,
+		TPOS,
+		TPUB,
+		TRCK,
+		TRDA,
+		TRSN,
+		TRSO,
+		TSIZ,
+		TSRC,
+		TSSE,
+		TYER
 	}
 
 	public enum URLTAGS
@@ -322,11 +237,11 @@ URL <text string>
 
 	class ID3Tag
 	{
-		ID3Class _parent;
-		string[] _texttags;
-		string[] _id3v23_tags;
-		string[] _id3v24_tags;
-		string[] _urltags;
+		private ID3Class _parent;
+		private string[] _texttags;
+		private string[] _id3v23_tags;
+		private string[] _id3v24_tags;
+		private string[] _urltags;
 		public ID3Tag()
 		{
 			inittagarrays();

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
 			this.button1 = new System.Windows.Forms.Button();
 			this.rtb1 = new System.Windows.Forms.RichTextBox();
 			this.button2 = new System.Windows.Forms.Button();
@@ -56,19 +57,22 @@
 			this.lblignore = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
-			this.btnbraces = new System.Windows.Forms.Button();
+			this.btnRemoveBetween = new System.Windows.Forms.Button();
 			this.btnemptyfolders = new System.Windows.Forms.Button();
+			this.btnCopyFiles = new System.Windows.Forms.Button();
+			this.btnAttrib = new System.Windows.Forms.Button();
+			this.btnwhich = new System.Windows.Forms.Button();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button1
 			// 
 			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button1.Location = new System.Drawing.Point(621, 36);
+			this.button1.Location = new System.Drawing.Point(734, 36);
 			this.button1.Margin = new System.Windows.Forms.Padding(4);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(112, 23);
-			this.button1.TabIndex = 7;
+			this.button1.TabIndex = 17;
 			this.button1.Text = "recursive";
 			this.button1.UseVisualStyleBackColor = true;
 			this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -81,25 +85,25 @@
 			this.rtb1.Location = new System.Drawing.Point(6, 212);
 			this.rtb1.Margin = new System.Windows.Forms.Padding(4);
 			this.rtb1.Name = "rtb1";
-			this.rtb1.Size = new System.Drawing.Size(726, 241);
+			this.rtb1.Size = new System.Drawing.Size(839, 241);
 			this.rtb1.TabIndex = 17;
 			this.rtb1.Text = "";
 			// 
 			// button2
 			// 
 			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button2.Location = new System.Drawing.Point(621, 63);
+			this.button2.Location = new System.Drawing.Point(734, 63);
 			this.button2.Margin = new System.Windows.Forms.Padding(4);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(112, 23);
-			this.button2.TabIndex = 8;
+			this.button2.TabIndex = 18;
 			this.button2.Text = "non-recursive";
 			this.button2.UseVisualStyleBackColor = true;
 			this.button2.Click += new System.EventHandler(this.button2_Click);
 			// 
 			// btnfirstfolder
 			// 
-			this.btnfirstfolder.Location = new System.Drawing.Point(12, 32);
+			this.btnfirstfolder.Location = new System.Drawing.Point(15, 32);
 			this.btnfirstfolder.Name = "btnfirstfolder";
 			this.btnfirstfolder.Size = new System.Drawing.Size(106, 23);
 			this.btnfirstfolder.TabIndex = 1;
@@ -112,9 +116,9 @@
 			this.tbfirstfolder.AllowDrop = true;
 			this.tbfirstfolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.tbfirstfolder.Location = new System.Drawing.Point(125, 34);
+			this.tbfirstfolder.Location = new System.Drawing.Point(126, 34);
 			this.tbfirstfolder.Name = "tbfirstfolder";
-			this.tbfirstfolder.Size = new System.Drawing.Size(491, 23);
+			this.tbfirstfolder.Size = new System.Drawing.Size(604, 23);
 			this.tbfirstfolder.TabIndex = 2;
 			this.toolTip1.SetToolTip(this.tbfirstfolder, "TopLevel Folder to Start The Search");
 			this.tbfirstfolder.DragDrop += new System.Windows.Forms.DragEventHandler(this.tbfolder_DragDrop);
@@ -123,10 +127,10 @@
 			// btnClose
 			// 
 			this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnClose.Location = new System.Drawing.Point(652, 460);
+			this.btnClose.Location = new System.Drawing.Point(765, 460);
 			this.btnClose.Name = "btnClose";
 			this.btnClose.Size = new System.Drawing.Size(75, 25);
-			this.btnClose.TabIndex = 14;
+			this.btnClose.TabIndex = 19;
 			this.btnClose.Text = "E&xit";
 			this.btnClose.UseVisualStyleBackColor = true;
 			this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
@@ -137,7 +141,7 @@
             this.filesToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(739, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(852, 24);
 			this.menuStrip1.TabIndex = 8;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -185,9 +189,9 @@
 			this.tbsecondfolder.AllowDrop = true;
 			this.tbsecondfolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.tbsecondfolder.Location = new System.Drawing.Point(125, 63);
+			this.tbsecondfolder.Location = new System.Drawing.Point(126, 63);
 			this.tbsecondfolder.Name = "tbsecondfolder";
-			this.tbsecondfolder.Size = new System.Drawing.Size(491, 23);
+			this.tbsecondfolder.Size = new System.Drawing.Size(604, 23);
 			this.tbsecondfolder.TabIndex = 4;
 			this.toolTip1.SetToolTip(this.tbsecondfolder, "TopLevel Folder to Compare to Start Folder for Duplicates");
 			this.tbsecondfolder.DragDrop += new System.Windows.Forms.DragEventHandler(this.tbfolder_DragDrop);
@@ -199,7 +203,7 @@
 			this.tmatch.Name = "tmatch";
 			this.tmatch.Size = new System.Drawing.Size(250, 23);
 			this.tmatch.TabIndex = 9;
-			this.toolTip1.SetToolTip(this.tmatch, " Characters to be Replaced");
+			this.toolTip1.SetToolTip(this.tmatch, " Characters to be Replaced\r\nor\r\nAtrributes to be Removed");
 			// 
 			// tignore
 			// 
@@ -227,7 +231,7 @@
 			// 
 			// btnsecondfolder
 			// 
-			this.btnsecondfolder.Location = new System.Drawing.Point(12, 61);
+			this.btnsecondfolder.Location = new System.Drawing.Point(15, 61);
 			this.btnsecondfolder.Name = "btnsecondfolder";
 			this.btnsecondfolder.Size = new System.Drawing.Size(106, 23);
 			this.btnsecondfolder.TabIndex = 3;
@@ -237,11 +241,11 @@
 			// 
 			// btnMerge
 			// 
-			this.btnMerge.Location = new System.Drawing.Point(12, 146);
+			this.btnMerge.Location = new System.Drawing.Point(16, 180);
 			this.btnMerge.Name = "btnMerge";
-			this.btnMerge.Size = new System.Drawing.Size(75, 25);
-			this.btnMerge.TabIndex = 16;
-			this.btnMerge.Text = "&Merge";
+			this.btnMerge.Size = new System.Drawing.Size(249, 25);
+			this.btnMerge.TabIndex = 8;
+			this.btnMerge.Text = "Copy Files (MP3) &Fix Metadata";
 			this.btnMerge.UseVisualStyleBackColor = true;
 			this.btnMerge.Click += new System.EventHandler(this.btnMerge_Click);
 			// 
@@ -266,7 +270,7 @@
 			// 
 			// btnfixdisc
 			// 
-			this.btnfixdisc.Location = new System.Drawing.Point(654, 149);
+			this.btnfixdisc.Location = new System.Drawing.Point(684, 149);
 			this.btnfixdisc.Name = "btnfixdisc";
 			this.btnfixdisc.Size = new System.Drawing.Size(75, 25);
 			this.btnfixdisc.TabIndex = 13;
@@ -305,7 +309,7 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(12, 127);
+			this.label1.Location = new System.Drawing.Point(15, 127);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(82, 16);
 			this.label1.TabIndex = 25;
@@ -314,31 +318,61 @@
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(12, 98);
+			this.label2.Location = new System.Drawing.Point(15, 98);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(67, 16);
 			this.label2.TabIndex = 24;
 			this.label2.Text = "Find This";
 			// 
-			// btnbraces
+			// btnRemoveBetween
 			// 
-			this.btnbraces.Location = new System.Drawing.Point(497, 149);
-			this.btnbraces.Name = "btnbraces";
-			this.btnbraces.Size = new System.Drawing.Size(139, 25);
-			this.btnbraces.TabIndex = 12;
-			this.btnbraces.Text = "&Remove Between";
-			this.btnbraces.UseVisualStyleBackColor = true;
-			this.btnbraces.Click += new System.EventHandler(this.btnbraces_Click);
+			this.btnRemoveBetween.Location = new System.Drawing.Point(493, 149);
+			this.btnRemoveBetween.Name = "btnRemoveBetween";
+			this.btnRemoveBetween.Size = new System.Drawing.Size(139, 25);
+			this.btnRemoveBetween.TabIndex = 12;
+			this.btnRemoveBetween.Text = "&Remove Between";
+			this.btnRemoveBetween.UseVisualStyleBackColor = true;
+			this.btnRemoveBetween.Click += new System.EventHandler(this.btnRemoveBetween_Click);
 			// 
 			// btnemptyfolders
 			// 
-			this.btnemptyfolders.Location = new System.Drawing.Point(497, 180);
+			this.btnemptyfolders.Location = new System.Drawing.Point(492, 180);
 			this.btnemptyfolders.Name = "btnemptyfolders";
-			this.btnemptyfolders.Size = new System.Drawing.Size(139, 25);
+			this.btnemptyfolders.Size = new System.Drawing.Size(180, 25);
 			this.btnemptyfolders.TabIndex = 15;
-			this.btnemptyfolders.Text = "&Empty Folders";
+			this.btnemptyfolders.Text = "Remove &Empty Folders";
 			this.btnemptyfolders.UseVisualStyleBackColor = true;
 			this.btnemptyfolders.Click += new System.EventHandler(this.btnemptyfolders_Click);
+			// 
+			// btnCopyFiles
+			// 
+			this.btnCopyFiles.Location = new System.Drawing.Point(15, 149);
+			this.btnCopyFiles.Name = "btnCopyFiles";
+			this.btnCopyFiles.Size = new System.Drawing.Size(251, 25);
+			this.btnCopyFiles.TabIndex = 7;
+			this.btnCopyFiles.Text = "&Copy Files  w/o Metadata";
+			this.btnCopyFiles.UseVisualStyleBackColor = true;
+			this.btnCopyFiles.Click += new System.EventHandler(this.btnCopyFiles_Click);
+			// 
+			// btnAttrib
+			// 
+			this.btnAttrib.Location = new System.Drawing.Point(683, 180);
+			this.btnAttrib.Name = "btnAttrib";
+			this.btnAttrib.Size = new System.Drawing.Size(111, 25);
+			this.btnAttrib.TabIndex = 16;
+			this.btnAttrib.Text = "Fix &Attributes";
+			this.btnAttrib.UseVisualStyleBackColor = true;
+			this.btnAttrib.Click += new System.EventHandler(this.btnAttrib_Click);
+			// 
+			// btnwhich
+			// 
+			this.btnwhich.Location = new System.Drawing.Point(736, 89);
+			this.btnwhich.Name = "btnwhich";
+			this.btnwhich.Size = new System.Drawing.Size(112, 42);
+			this.btnwhich.TabIndex = 26;
+			this.btnwhich.Text = "Use Dest Folder";
+			this.btnwhich.UseVisualStyleBackColor = true;
+			this.btnwhich.Click += new System.EventHandler(this.btnwhich_Click);
 			// 
 			// Form1
 			// 
@@ -346,9 +380,12 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.PaleGoldenrod;
-			this.ClientSize = new System.Drawing.Size(739, 486);
+			this.ClientSize = new System.Drawing.Size(852, 486);
+			this.Controls.Add(this.btnwhich);
+			this.Controls.Add(this.btnAttrib);
+			this.Controls.Add(this.btnCopyFiles);
 			this.Controls.Add(this.btnemptyfolders);
-			this.Controls.Add(this.btnbraces);
+			this.Controls.Add(this.btnRemoveBetween);
 			this.Controls.Add(this.tsub);
 			this.Controls.Add(this.tfind);
 			this.Controls.Add(this.label1);
@@ -372,11 +409,11 @@
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.menuStrip1);
 			this.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MainMenuStrip = this.menuStrip1;
 			this.Margin = new System.Windows.Forms.Padding(4);
 			this.Name = "Form1";
 			this.Text = "Directory Assist";
-			this.Load += new System.EventHandler(this.Form1_Load);
 			this.DragDrop += new System.Windows.Forms.DragEventHandler(this.Form1_DragDrop);
 			this.DragEnter += new System.Windows.Forms.DragEventHandler(this.Form1_DragEnter);
 			this.menuStrip1.ResumeLayout(false);
@@ -415,8 +452,11 @@
 		private System.Windows.Forms.TextBox tfind;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Button btnbraces;
+		private System.Windows.Forms.Button btnRemoveBetween;
 		private System.Windows.Forms.Button btnemptyfolders;
+		private System.Windows.Forms.Button btnCopyFiles;
+		private System.Windows.Forms.Button btnAttrib;
+		private System.Windows.Forms.Button btnwhich;
 	}
 }
 
