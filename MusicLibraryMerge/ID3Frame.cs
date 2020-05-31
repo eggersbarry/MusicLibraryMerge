@@ -1,47 +1,70 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+//using System.Linq;
+//using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 /* https://id3.org/Developer%20Information*/
 namespace MusicLibraryMerge
 {
 	class ID3Frame
 	{
-		bool _flaga;
-		bool _flagb;
-		bool _flagc;
-		bool _flagi;
-		bool _flagj;
-		bool _flagk;
-		byte[] _flags;
-		bool _textflag;
-		bool _v24flag;
-		bool _v23flag;
-		bool _unicodeflag;
-		bool _validtagflag;
-		bool _standardtagflag;
-		string _strcontent;
-		char[] _charcontent;
-		byte[] _bytecontent;
-		string _name;
-		byte[] _namebytes;
-		Int32 _length;
-		ID3Class _parent;
+		private bool _flaga;
+		private bool _flagb;
+		private bool _flagc;
+		private bool _flagi;
+		private bool _flagj;
+		private bool _flagk;
+		private bool _textflag;
+		private bool _v24flag;
+		private bool _v23flag;
+		private bool _unicodeflag;
+		private bool _validtagflag;
+		private bool _standardtagflag;
+		private byte[] _flags = new byte[] { 0, 0 };
+		private byte[] _unicodebom = new byte[] { 0xff, 0xfe };  //default unicode bom
+		private char[] _charcontent;
+		private byte[] _bytecontent;
+		private byte[] _namebytes;
+		private string _name;
+		private string _strcontent;
+		private System.Text.Encoding _lclencoding;
+		private Int32 _length;
+		private ID3Class _parent;
 
 		public ID3Frame(ID3Class lclparent)
 		{
-			_parent = lclparent;
+			Parent = lclparent;
+			initflags();
 		}
 		public ID3Frame()
 		{
+			initflags();
 			return;
+		}
+		private void initflags()
+		{
+			_flaga = false;
+			_flagb = false;
+			_flagc = false;
+			_flagi = false;
+			_flagj = false;
+			_flagk = false;
+			_textflag = false;
+			_v24flag = false;
+			_v23flag = false;
+			_unicodeflag = false;
+			_validtagflag = false;
+			_standardtagflag = false;
 		}
 		public ID3Class Parent
 		{
 			get { return _parent; }
-			set { _parent = value; }
+			set
+			{
+				_parent = value;
+				_lclencoding = System.Text.Encoding.GetEncoding(_parent.EncodingName);
+			}
 		}
 		~ID3Frame()
 		{
@@ -121,6 +144,7 @@ namespace MusicLibraryMerge
 			set
 			{
 				_name = value;
+				_namebytes = _lclencoding.GetBytes(_name);
 				CheckTagFlag(_name);
 			}
 		}
@@ -130,7 +154,7 @@ namespace MusicLibraryMerge
 			set
 			{
 				_namebytes = (byte[])value.Clone();
-				_name = System.Text.Encoding.GetEncoding(((ID3Class)_parent).EncodingName).GetString(_namebytes);
+				_name = _lclencoding.GetString(_namebytes);
 				CheckTagFlag(_name);
 			}
 		}
@@ -144,22 +168,85 @@ namespace MusicLibraryMerge
 		public string ContentString
 		{
 			get { return _strcontent; }
-			set { _strcontent = value; }
+			set
+			{
+				_strcontent = value;
+				if (_unicodeflag)
+				{
+					_bytecontent = System.Text.UnicodeEncoding.Unicode.GetBytes(_strcontent);
+					_charcontent = System.Text.UnicodeEncoding.Unicode.GetChars(_bytecontent);
+					_length = _bytecontent.Length;
+					_length += 2;
+				}
+				else
+				{
+					_bytecontent = _lclencoding.GetBytes(_strcontent);
+					_charcontent = _lclencoding.GetChars(_bytecontent);
+					_length = _bytecontent.Length;
+				}
+				if (_textflag)
+				{
+					_length += 1;
+				}
+			}
 		}
 		public char[] ContentChars
 		{
 			get { return (char[])_charcontent.Clone(); }
-			set { _charcontent = (char[])value.Clone(); }
+			set
+			{
+				_charcontent = (char[])value.Clone();
+				if (_unicodeflag)
+				{
+					_bytecontent = System.Text.UnicodeEncoding.Unicode.GetBytes(_charcontent);
+					_strcontent = System.Text.UnicodeEncoding.Unicode.GetString(_bytecontent);
+					_length = _bytecontent.Length;
+				}
+				else
+				{
+					_bytecontent = _lclencoding.GetBytes(_charcontent);
+					_strcontent = _lclencoding.GetString(_bytecontent);
+					_length = _bytecontent.Length;
+				}
+				if (_textflag)
+				{
+					_length += 1;
+				}
+			}
 		}
 		public byte[] ContentBytes
 		{
 			get { return (byte[])_bytecontent.Clone(); }
-			set { _bytecontent = (byte[])value.Clone(); }
+			set
+			{
+				_bytecontent = (byte[])value.Clone();
+				_length = _bytecontent.Length;
+				if (_unicodeflag)
+				{
+					_charcontent = System.Text.UnicodeEncoding.Unicode.GetChars(_bytecontent);
+					_strcontent = System.Text.UnicodeEncoding.Unicode.GetString(_bytecontent);
+					_length += 2;
+				}
+				else
+				{
+					_charcontent = _lclencoding.GetChars(_bytecontent);
+					_strcontent = _lclencoding.GetString(_bytecontent);
+				}
+				if (_textflag)
+				{
+					_length += 1;
+				}
+			}
 		}
 		public bool UnicodeFlag
 		{
 			get { return _unicodeflag; }
 			set { _unicodeflag = value; }
+		}
+		public byte[] UnicodeBOM
+		{
+			get { return _unicodebom; }
+			set { _unicodebom = (byte[])value.Clone(); }
 		}
 		public bool ValidTag
 		{
