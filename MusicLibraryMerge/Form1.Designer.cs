@@ -62,6 +62,7 @@
 			this.btnCopyFiles = new System.Windows.Forms.Button();
 			this.btnAttrib = new System.Windows.Forms.Button();
 			this.btnwhich = new System.Windows.Forms.Button();
+			this.btn_FillData = new System.Windows.Forms.Button();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -86,7 +87,7 @@
 			this.rtb1.Margin = new System.Windows.Forms.Padding(4);
 			this.rtb1.Name = "rtb1";
 			this.rtb1.Size = new System.Drawing.Size(839, 241);
-			this.rtb1.TabIndex = 17;
+			this.rtb1.TabIndex = 18;
 			this.rtb1.Text = "";
 			// 
 			// button2
@@ -270,11 +271,12 @@
 			// 
 			// btnfixdisc
 			// 
-			this.btnfixdisc.Location = new System.Drawing.Point(684, 149);
+			this.btnfixdisc.Location = new System.Drawing.Point(797, 180);
 			this.btnfixdisc.Name = "btnfixdisc";
-			this.btnfixdisc.Size = new System.Drawing.Size(75, 25);
-			this.btnfixdisc.TabIndex = 13;
+			this.btnfixdisc.Size = new System.Drawing.Size(43, 25);
+			this.btnfixdisc.TabIndex = 17;
 			this.btnfixdisc.Text = "&fix&Disc";
+			this.toolTip1.SetToolTip(this.btnfixdisc, "17");
 			this.btnfixdisc.UseVisualStyleBackColor = true;
 			this.btnfixdisc.Click += new System.EventHandler(this.btnfixdisc_Click);
 			// 
@@ -374,6 +376,17 @@
 			this.btnwhich.UseVisualStyleBackColor = true;
 			this.btnwhich.Click += new System.EventHandler(this.btnwhich_Click);
 			// 
+			// btn_FillData
+			// 
+			this.btn_FillData.Location = new System.Drawing.Point(638, 149);
+			this.btn_FillData.Name = "btn_FillData";
+			this.btn_FillData.Size = new System.Drawing.Size(123, 25);
+			this.btn_FillData.TabIndex = 13;
+			this.btn_FillData.Text = "Fix &Artists";
+			this.toolTip1.SetToolTip(this.btn_FillData, "13");
+			this.btn_FillData.UseVisualStyleBackColor = true;
+			this.btn_FillData.Click += new System.EventHandler(this.btn_FillData_Click);
+			// 
 			// Form1
 			// 
 			this.AllowDrop = true;
@@ -381,6 +394,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.PaleGoldenrod;
 			this.ClientSize = new System.Drawing.Size(852, 486);
+			this.Controls.Add(this.btn_FillData);
 			this.Controls.Add(this.btnwhich);
 			this.Controls.Add(this.btnAttrib);
 			this.Controls.Add(this.btnCopyFiles);
@@ -457,6 +471,7 @@
 		private System.Windows.Forms.Button btnCopyFiles;
 		private System.Windows.Forms.Button btnAttrib;
 		private System.Windows.Forms.Button btnwhich;
+		private System.Windows.Forms.Button btn_FillData;
 	}
 }
 

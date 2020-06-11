@@ -36,6 +36,9 @@
     <ApplicationIcon>MusicMerge.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ID3Class">
+      <HintPath>..\..\ID3Class\ID3Class\bin\Debug\ID3Class.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -55,11 +58,6 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="ID3Class.cs" />
-    <Compile Include="ID3ExtendedHeader.cs" />
-    <Compile Include="ID3Frame.cs" />
-    <Compile Include="ID3Header.cs" />
-    <Compile Include="ID3Tag.cs" />
     <Compile Include="MyDir1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-//using System.Diagnostics.SymbolStore;
-//using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-//using System.Threading.Tasks;
 
 namespace MusicLibraryMerge
 {
 	class MyDir1
 	{
 		private string _mp3extension = ".MP3";
-				   public string  MP3Extension
-				   {
-				   get { return _mp3extension; }
-				   }
+		public string MP3Extension
+		{
+			get { return _mp3extension; }
+		}
 		public MyDir1()
 		{
 			return;
@@ -413,9 +409,9 @@ namespace MusicLibraryMerge
 
 				string[] attribname = Enum.GetNames(typeof(System.IO.FileAttributes));
 				int[] attribvalues = (int[])Enum.GetValues(typeof(System.IO.FileAttributes));
-				for (int ii =0; ii<attribname.Length;ii++)
+				for (int ii = 0; ii < attribname.Length; ii++)
 				{
-					if(mask1.IndexOf(attribname[ii],System.StringComparison.OrdinalIgnoreCase)>=0)			
+					if (mask1.IndexOf(attribname[ii], System.StringComparison.OrdinalIgnoreCase) >= 0)
 					{
 						lclfas &= ~(System.IO.FileAttributes)attribvalues[ii];
 					}

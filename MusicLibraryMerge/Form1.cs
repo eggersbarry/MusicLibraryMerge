@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-//using System.Data.SqlClient;
-//using System.Diagnostics.PerformanceData;
-using System.Linq;
+//using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -273,7 +270,7 @@ namespace MusicLibraryMerge
 			string filepath;
 			string fulldirname;
 			string thisfilename;
-			ID3Frame lclframe;
+			ID3Class.ID3Frame lclframe;
 			string didwhat = System.String.Empty;
 			int copied = 0, skipped = 0, notcopied = 0, tmpint = 0; ;
 
@@ -283,6 +280,7 @@ namespace MusicLibraryMerge
 			ShowFound(sb1.Count);
 			foreach (string thisfile in sb1)
 			{
+				Application.DoEvents();
 				ext = System.IO.Path.GetExtension(thisfile);
 				filefullpath = System.IO.Path.GetFullPath(thisfile);
 				filepath = System.IO.Path.GetPathRoot(thisfile);
@@ -307,13 +305,13 @@ namespace MusicLibraryMerge
 								songname = songname.Remove(0, 3);
 							}
 
-							ID3Class myid3 = new ID3Class(thisfile);
+							ID3Class.ID3Data myid3 = new ID3Class.ID3Data(thisfile);
 							myid3.ReadMetaData();
 
 							lclframe = myid3.FindFirstFrame("TALB");// album name
 							if (lclframe == null)
 							{
-								lclframe = new ID3Frame(myid3);
+								lclframe = new ID3Class.ID3Frame(myid3);
 								lclframe.Name = "TALB";
 								myid3.FrameList.Add(lclframe);
 							}
@@ -326,7 +324,7 @@ namespace MusicLibraryMerge
 							lclframe = myid3.FindFirstFrame("TIT2"); // Song title
 							if (lclframe == null)
 							{
-								lclframe = new ID3Frame(myid3);
+								lclframe = new ID3Class.ID3Frame(myid3);
 								lclframe.Name = "TIT2";
 								myid3.FrameList.Add(lclframe);
 							}
@@ -336,7 +334,7 @@ namespace MusicLibraryMerge
 							lclframe = myid3.FindFirstFrame("TPE2");// album artist
 							if (lclframe == null)
 							{
-								lclframe = new ID3Frame(myid3);
+								lclframe = new ID3Class.ID3Frame(myid3);
 								lclframe.Name = "TPE2";
 								myid3.FrameList.Add(lclframe);
 							}
@@ -385,6 +383,7 @@ namespace MusicLibraryMerge
 			ShowFound(sb1.Count);
 			foreach (string thisfile in sb1)
 			{
+				Application.DoEvents();
 				ext = System.IO.Path.GetExtension(thisfile);
 				filefullpath = System.IO.Path.GetFullPath(thisfile);
 				filepath = System.IO.Path.GetPathRoot(thisfile);
@@ -456,6 +455,7 @@ namespace MusicLibraryMerge
 			ShowFound(sb1.Count);
 			foreach (string thisfile in sb1)
 			{
+				Application.DoEvents();
 				sb2.Add(md.FixTrimFileName(thisfile, replacemask));
 			}
 			sb1.AddRange(sb2);
@@ -481,6 +481,7 @@ namespace MusicLibraryMerge
 			ShowFound(sb1.Count);
 			foreach (string thisfile in sb1)
 			{
+				Application.DoEvents();
 				sb2.Add(md.FixFileNameReplace(thisfile, replacemask, submask));
 			}
 			sb1.AddRange(sb2);
@@ -506,6 +507,7 @@ namespace MusicLibraryMerge
 			ShowFound(sb1.Count);
 			foreach (string thisfile in sb1)
 			{
+				Application.DoEvents();
 				sb2.Add(md.FixFileNameRemoveBraces(thisfile, replacemask, submask));
 			}
 			sb1.AddRange(sb2);
@@ -527,6 +529,7 @@ namespace MusicLibraryMerge
 			ShowFound(sb1.Count);
 			foreach (string thisfile in sb1)
 			{
+				Application.DoEvents();
 				string thisstring = md.RemoveEmptyFolders(thisfile);
 				if (!System.String.IsNullOrEmpty(thisstring))
 				{
@@ -563,6 +566,7 @@ namespace MusicLibraryMerge
 			}
 			foreach (string thisfile in sb1)
 			{
+				Application.DoEvents();
 				sb2.Add(md.FixDiscFileName(thisfile, mask1));
 			}
 			sb1.AddRange(sb2);
@@ -597,6 +601,7 @@ namespace MusicLibraryMerge
 			}
 			foreach (string thisfile in sb1)
 			{
+				Application.DoEvents();
 				sb2.Add(md.FixAttributes(thisfile, mask1));
 			}
 			sb1.AddRange(sb2);
@@ -646,7 +651,7 @@ namespace MusicLibraryMerge
 			Cursor oldcursor = Cursor;
 			Cursor = Cursors.WaitCursor;
 			rtb1.Lines = DoEmptyFolders().ToArray();
-			ShowFound(rtb1.Lines.Count());
+			ShowFound(rtb1.Lines.Length);
 			Cursor = oldcursor;
 		}
 
@@ -655,7 +660,7 @@ namespace MusicLibraryMerge
 			Cursor oldcursor = Cursor;
 			Cursor = Cursors.WaitCursor;
 			rtb1.Lines = CopyFiles().ToArray();
-			ShowFound(rtb1.Lines.Count());
+			ShowFound(rtb1.Lines.Length);
 			Cursor = oldcursor;
 		}
 
@@ -664,7 +669,7 @@ namespace MusicLibraryMerge
 			Cursor oldcursor = Cursor;
 			Cursor = Cursors.WaitCursor;
 			rtb1.Lines = DoFixAttributes("SystemHidden").ToArray();
-			ShowFound(rtb1.Lines.Count());
+			ShowFound(rtb1.Lines.Length);
 			Cursor = oldcursor;
 		}
 
@@ -680,6 +685,15 @@ namespace MusicLibraryMerge
 				btnwhich.Text = "Use Start Folder";
 				_whichfolder = 1;
 			}
+		}
+
+		private void btn_FillData_Click(object sender, EventArgs e)
+		{
+			Cursor oldcursor = Cursor;
+			Cursor = Cursors.WaitCursor;
+			//rtb1.Lines = DoFixAttributes("SystemHidden").ToArray();
+			//ShowFound(rtb1.Lines.Length);
+			Cursor = oldcursor;
 		}
 	}
 }
