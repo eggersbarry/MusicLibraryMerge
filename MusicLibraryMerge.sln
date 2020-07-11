@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicLibraryMerge", "MusicL
 		{F7937AFC-5175-490B-A51F-E278A9E6B477} = {F7937AFC-5175-490B-A51F-E278A9E6B477}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ID3Class", "..\ID3Class\ID3Class\ID3Class.csproj", "{F7937AFC-5175-490B-A51F-E278A9E6B477}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ID3Class", "..\ID3Class\ID3Class.csproj", "{F7937AFC-5175-490B-A51F-E278A9E6B477}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

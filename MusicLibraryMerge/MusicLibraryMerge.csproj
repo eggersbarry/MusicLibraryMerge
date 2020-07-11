@@ -36,9 +36,6 @@
     <ApplicationIcon>MusicMerge.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ID3Class">
-      <HintPath>..\..\ID3Class\ID3Class\bin\Debug\ID3Class.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -88,6 +85,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MusicMerge.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ID3Class\ID3Class.csproj">
+      <Project>{f7937afc-5175-490b-a51f-e278a9e6b477}</Project>
+      <Name>ID3Class</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
