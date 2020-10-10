@@ -414,7 +414,7 @@
 			// btnwhich
 			// 
 			this.btnwhich.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnwhich.Location = new System.Drawing.Point(749, 32);
+			this.btnwhich.Location = new System.Drawing.Point(749, 58);
 			this.btnwhich.Name = "btnwhich";
 			this.btnwhich.Size = new System.Drawing.Size(148, 25);
 			this.btnwhich.TabIndex = 8;
@@ -457,7 +457,7 @@
 			this.cb_subs.AutoSize = true;
 			this.cb_subs.Checked = true;
 			this.cb_subs.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cb_subs.Location = new System.Drawing.Point(749, 63);
+			this.cb_subs.Location = new System.Drawing.Point(749, 37);
 			this.cb_subs.Name = "cb_subs";
 			this.cb_subs.Size = new System.Drawing.Size(127, 20);
 			this.cb_subs.TabIndex = 9;
