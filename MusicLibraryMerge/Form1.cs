@@ -83,6 +83,25 @@ namespace MusicLibraryMerge
 			}
 			return mask1;
 		}
+		private string Get1BetweenMask()
+		{
+			string mask2 = string.Empty;
+			if (!System.String.IsNullOrEmpty(tfirstbetween.Text))
+			{
+				mask2 = tfirstbetween.Text;
+			}
+			return mask2;
+		}
+		private string Get2BetweenMask()
+		{
+			string mask2 = string.Empty;
+			if (!System.String.IsNullOrEmpty(tlastbetween.Text))
+			{
+				mask2 = tlastbetween.Text;
+			}
+			return mask2;
+		}
+
 		private string GetIgnoreMask()
 		{
 			string mask2 = string.Empty;
@@ -104,13 +123,14 @@ namespace MusicLibraryMerge
 			string ignoremask = GetIgnoreMask();
 			string findmask = GetFindMask();
 			string submask = GetSubMask();
+			int usesubs = cb_subs.Checked == true ? 1 : 0;
 			if (snder.Name == "button1")
 			{
-				sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask));
+				sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask, usesubs));
 			}
 			else
 			{
-				sb1.AddRange(md.GetAllFiles(thispath, findmask, ignoremask));
+				sb1.AddRange(md.GetAllFiles(thispath, findmask, ignoremask, usesubs));
 			}
 			sb1.Sort();
 			rtb1.Lines = sb1.ToArray();
@@ -246,13 +266,15 @@ namespace MusicLibraryMerge
 			Cursor oldcursor = Cursor;
 			Cursor = Cursors.WaitCursor;
 			rtb1.Clear();
-			rtb1.Lines = DoFixMetaData().ToArray();
-			Cursor = oldcursor;
-		}
-		private List<string> DoFixMetaData()
-		{
+			int copytosubs = cb_copytosubs.Checked == true ? 1 : 0;
 			string thispath = tbfirstfolder.Text;
 			string putpath = tbsecondfolder.Text;
+			int usesubs = cb_subs.Checked == true ? 1 : 0;
+			rtb1.Lines = DoFixMetaData(copytosubs, usesubs, thispath, putpath).ToArray();
+			Cursor = oldcursor;
+		}
+		private List<string> DoFixMetaData(int copytosubs, int usesubs, string thispath, string putpath)
+		{
 			MyDir1 md = new MyDir1();
 			List<string> sb1 = new List<string>();
 			List<string> sb2 = new List<string>();
@@ -264,7 +286,7 @@ namespace MusicLibraryMerge
 			string artist;
 			string songname;
 			string[] mdata;
-			string newfile;
+			string newfile = System.String.Empty;
 			string ext;
 			string filefullpath;
 			string filepath;
@@ -272,9 +294,9 @@ namespace MusicLibraryMerge
 			string thisfilename;
 			ID3Class.ID3Frame lclframe;
 			string didwhat = System.String.Empty;
-			int copied = 0, skipped = 0, notcopied = 0, tmpint = 0; ;
+			int copied = 0, skipped = 0, notcopied = 0;
 
-			sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask));
+			sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask, usesubs));
 			sb1.Sort();
 			rtb1.Lines = sb1.ToArray();
 			ShowFound(sb1.Count);
@@ -291,7 +313,14 @@ namespace MusicLibraryMerge
 				Application.DoEvents();
 				if (System.IO.Path.GetExtension(thisfile).ToUpper().Equals(md.MP3Extension))
 				{
-					newfile = thisfile.Replace(thispath, putpath);
+					if (copytosubs == 1)
+					{
+						newfile = thisfile.Replace(thispath, putpath);
+					}
+					if (copytosubs == 0)
+					{
+						newfile = putpath + System.IO.Path.DirectorySeparatorChar + thisfilename + ext;
+					}
 					if (newfile.Length < max_path)
 					{
 						mdata = thisfile.Remove(0, thispath.Length).Split(new char[] { System.IO.Path.DirectorySeparatorChar }, System.StringSplitOptions.RemoveEmptyEntries);
@@ -300,7 +329,7 @@ namespace MusicLibraryMerge
 							artist = mdata[0];
 							album = mdata[1];
 							songname = mdata[2].Substring(0, mdata[2].Length - (ext.Length));
-							if (int.TryParse(songname.Substring(0, 2), out tmpint))
+							if (int.TryParse(songname.Substring(0, 2), out int tmpint))
 							{
 								songname = songname.Remove(0, 3);
 							}
@@ -358,10 +387,8 @@ namespace MusicLibraryMerge
 			sb2.Add(string.Format("{0:d} of {1:d} ---- copied={2:d} skipped={3:d} errored={4:d}", sb2.Count, sb1.Count, copied, skipped, notcopied));
 			return sb2;
 		}
-		private List<string> CopyFiles()
+		private List<string> CopyFiles(int copytosubs, int usesubs, string thispath, string putpath)
 		{
-			string thispath = tbfirstfolder.Text;
-			string putpath = tbsecondfolder.Text;
 			MyDir1 md = new MyDir1();
 			List<string> sb1 = new List<string>();
 			List<string> sb2 = new List<string>();
@@ -377,7 +404,7 @@ namespace MusicLibraryMerge
 			string didwhat = System.String.Empty;
 			int copied = 0, skipped = 0, notcopied = 0;
 
-			sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask));
+			sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask, usesubs));
 			sb1.Sort();
 			rtb1.Lines = sb1.ToArray();
 			ShowFound(sb1.Count);
@@ -392,13 +419,20 @@ namespace MusicLibraryMerge
 				rtb1.Text = string.Format("{0:d} of {1:d}  {2:s}", sb2.Count, sb1.Count, thisfile);
 				rtb1.Refresh();
 				Application.DoEvents();
-				newfile = putpath + thisfile.Remove(0, thispath.Length);
+				if (copytosubs == 1)
+				{
+					newfile = putpath + thisfile.Remove(0, thispath.Length);
+				}
+				if (copytosubs == 0)
+				{
+					newfile = putpath + System.IO.Path.DirectorySeparatorChar + thisfilename + ext;
+				}
 				if (newfile.Length < max_path)
 				{
 					didwhat = "START";
 					try
 					{
-						newdir = fulldirname.Replace(thispath, putpath);
+						newdir = System.IO.Path.GetDirectoryName(newfile);
 						if (!System.IO.Directory.Exists(newdir))
 						{
 							System.IO.Directory.CreateDirectory(newdir);
@@ -411,8 +445,11 @@ namespace MusicLibraryMerge
 						}
 						else
 						{
-							skipped++;
-							didwhat = "++ Skipped ";
+							MyDir1 myd = new MyDir1();
+							newfile = myd.MakeNextFileName(newfile);
+							System.IO.File.Copy(thisfile, newfile);
+							copied++;
+							didwhat = "++ Copied To ";
 						}
 					}
 					catch (Exception ee)
@@ -449,7 +486,9 @@ namespace MusicLibraryMerge
 			string ignoremask = GetIgnoreMask();
 			string findmask = GetFindMask();
 			string submask = GetSubMask();
-			sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask));
+			int usesubs = cb_subs.Checked == true ? 1 : 0;
+
+			sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask, usesubs));
 			sb1.Sort();
 			rtb1.Lines = sb1.ToArray();
 			ShowFound(sb1.Count);
@@ -475,7 +514,9 @@ namespace MusicLibraryMerge
 			string ignoremask = GetIgnoreMask();
 			string findmask = GetFindMask();
 			string submask = GetSubMask();
-			sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask));
+			int usesubs = cb_subs.Checked == true ? 1 : 0;
+
+			sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask, usesubs));
 			sb1.Sort();
 			rtb1.Lines = sb1.ToArray();
 			ShowFound(sb1.Count);
@@ -497,18 +538,21 @@ namespace MusicLibraryMerge
 			MyDir1 md = new MyDir1();
 			List<string> sb1 = new List<string>();
 			List<string> sb2 = new List<string>();
-			string replacemask = GetReplaceMask();
+			string firstbetweenmask = Get1BetweenMask();
+			string secondbetweenmask = Get2BetweenMask();
 			string ignoremask = GetIgnoreMask();
 			string findmask = GetFindMask();
-			string submask = GetSubMask();
-			sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask));
+			//string submask = GetSubMask();
+			int usesubs = cb_subs.Checked == true ? 1 : 0;
+
+			sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask, usesubs));
 			sb1.Sort();
 			rtb1.Lines = sb1.ToArray();
 			ShowFound(sb1.Count);
 			foreach (string thisfile in sb1)
 			{
 				Application.DoEvents();
-				sb2.Add(md.FixFileNameRemoveBraces(thisfile, replacemask, submask));
+				sb2.Add(md.FixFileNameRemoveBraces(thisfile, firstbetweenmask, secondbetweenmask));
 			}
 			sb1.AddRange(sb2);
 			return sb1;
@@ -554,8 +598,9 @@ namespace MusicLibraryMerge
 			string ignoremask = GetIgnoreMask();
 			string findmask = GetFindMask();
 			string submask = GetSubMask();
+			int usesubs = cb_subs.Checked == true ? 1 : 0;
 
-			sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask));
+			sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask, usesubs));
 			sb1.Sort();
 			rtb1.Lines = sb1.ToArray();
 			ShowFound(sb1.Count);
@@ -569,6 +614,68 @@ namespace MusicLibraryMerge
 				Application.DoEvents();
 				sb2.Add(md.FixDiscFileName(thisfile, mask1));
 			}
+			sb1.AddRange(sb2);
+			return sb1;
+		}
+		private List<string> RemoveLeadingNos(int maxnumber)
+		{
+			List<string> sb1 = new List<string>();
+			List<string> sb2 = new List<string>();
+			string thispath = System.String.Empty;
+			if (_whichfolder == 2)
+			{ thispath = tbsecondfolder.Text; }
+			if (_whichfolder == 1)
+			{ thispath = tbfirstfolder.Text; }
+			MyDir1 md = new MyDir1();
+			string replacemask = GetReplaceMask();
+			string ignoremask = GetIgnoreMask();
+			string findmask = GetFindMask();
+			string submask = GetSubMask();
+			int usesubs = cb_subs.Checked == true ? 1 : 0;
+
+			sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask, usesubs));
+			sb1.Sort();
+
+			//rtb1.Lines = sb1.ToArray();
+			//ShowFound(sb1.Count);
+
+			foreach (string thisfile in sb1)
+			{
+				Application.DoEvents();
+				sb2.Add(md.RemoveLeadingNo(thisfile, maxnumber));
+			}
+
+			sb1.AddRange(sb2);
+			return sb1;
+		}
+		private List<string> RemoveTrailingNos()
+		{
+			List<string> sb1 = new List<string>();
+			List<string> sb2 = new List<string>();
+			string thispath = System.String.Empty;
+			if (_whichfolder == 2)
+			{ thispath = tbsecondfolder.Text; }
+			if (_whichfolder == 1)
+			{ thispath = tbfirstfolder.Text; }
+			MyDir1 md = new MyDir1();
+			string replacemask = GetReplaceMask();
+			string ignoremask = GetIgnoreMask();
+			string findmask = GetFindMask();
+			string submask = GetSubMask();
+			int usesubs = cb_subs.Checked == true ? 1 : 0;
+
+			sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask, usesubs));
+			sb1.Sort();
+
+			//rtb1.Lines = sb1.ToArray();
+			//ShowFound(sb1.Count);
+
+			foreach (string thisfile in sb1)
+			{
+				Application.DoEvents();
+				sb2.Add(md.RemoveTrailingNo(thisfile));
+			}
+
 			sb1.AddRange(sb2);
 			return sb1;
 		}
@@ -587,7 +694,9 @@ namespace MusicLibraryMerge
 			string findmask = GetFindMask();
 			//string submask = GetSubMask();
 			string mask1 = System.String.Empty;
-			sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask));
+			int usesubs = cb_subs.Checked == true ? 1 : 0;
+
+			sb1.AddRange(md.GetAllFilesRecursive(thispath, findmask, ignoremask, usesubs));
 			sb1.Sort();
 			rtb1.Lines = sb1.ToArray();
 			ShowFound(sb1.Count);
@@ -659,7 +768,11 @@ namespace MusicLibraryMerge
 		{
 			Cursor oldcursor = Cursor;
 			Cursor = Cursors.WaitCursor;
-			rtb1.Lines = CopyFiles().ToArray();
+			int copytosubs = cb_copytosubs.Checked == true ? 1 : 0;
+			string thispath = tbfirstfolder.Text;
+			string putpath = tbsecondfolder.Text;
+			int usesubs = cb_subs.Checked == true ? 1 : 0;
+			rtb1.Lines = CopyFiles(copytosubs, usesubs, thispath, putpath).ToArray();
 			ShowFound(rtb1.Lines.Length);
 			Cursor = oldcursor;
 		}
@@ -694,6 +807,30 @@ namespace MusicLibraryMerge
 			//rtb1.Lines = DoFixAttributes("SystemHidden").ToArray();
 			//ShowFound(rtb1.Lines.Length);
 			Cursor = oldcursor;
+		}
+
+		private void btnLeadingNo_Click(object sender, EventArgs e)
+		{
+			Cursor oldcursor = Cursor;
+			Cursor = Cursors.WaitCursor;
+			int.TryParse(tmaxnumber.Text, out int maxnumber);
+			rtb1.Lines = RemoveLeadingNos(maxnumber).ToArray();
+			ShowFound(rtb1.Lines.Length);
+			Cursor = oldcursor;
+		}
+
+		private void btnRemoveTrailingNos_Click(object sender, EventArgs e)
+		{
+			Cursor oldcursor = Cursor;
+			Cursor = Cursors.WaitCursor;
+			rtb1.Lines = RemoveTrailingNos().ToArray();
+			ShowFound(rtb1.Lines.Length);
+			Cursor = oldcursor;
+		}
+
+		private void rtb1_DoubleClick(object sender, EventArgs e)
+		{
+			rtb1.Text = System.String.Empty;
 		}
 	}
 }

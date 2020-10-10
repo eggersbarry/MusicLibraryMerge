@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 
 namespace MusicLibraryMerge
 {
@@ -43,23 +41,25 @@ namespace MusicLibraryMerge
 			}
 			else
 			{
+				string thisnewfile2 = MakeNextFileName(thisnewfile);
 				System.IO.FileInfo fisource = new System.IO.FileInfo(fname);
-				System.IO.FileInfo fidestination = new System.IO.FileInfo(thisnewfile);
-				if (fisource.Length == fidestination.Length)
-				{
-					fisource.Delete();
-					retval = "Deleted " + fname;
-				}
-				else
-				{
-					retval = "Not Fixed or Deleted " + fname;
-				}
+				System.IO.FileInfo fidestination = new System.IO.FileInfo(thisnewfile2);
+				fisource.CopyTo(thisnewfile2);
+				//if (fisource.Length == fidestination.Length)
+				//{
+				//	fisource.Delete();
+				//	retval = "Deleted " + fname;
+				//}
+				//else
+				//{
+				//	retval = "Not Fixed or Deleted " + fname;
+				//}
 				fisource = null;
 				fidestination = null;
 			}
 			return retval;
 		}
-		public List<string> GetAllFilesRecursive(string dirpath, string mask, string nomask)
+		public List<string> GetAllFilesRecursive(string dirpath, string mask, string nomask, int usesubs)
 		{
 			List<string> sbb = new List<string>();
 			int foundmatch = 0;
@@ -91,10 +91,13 @@ namespace MusicLibraryMerge
 					}
 				}
 			}
-			string[] dirs = System.IO.Directory.GetDirectories(dirpath);
-			foreach (string dir in dirs)
+			if (usesubs != 0)
 			{
-				sbb.AddRange(GetAllFilesRecursive(dir, mask, nomask));
+				string[] dirs = System.IO.Directory.GetDirectories(dirpath);
+				foreach (string dir in dirs)
+				{
+					sbb.AddRange(GetAllFilesRecursive(dir, mask, nomask, usesubs));
+				}
 			}
 			return sbb;
 		}
@@ -119,10 +122,18 @@ namespace MusicLibraryMerge
 			}
 			return sbb;
 		}
-		public List<string> GetAllFiles(string thispath, string whichfiles, string nomask)
+		public List<string> GetAllFiles(string thispath, string whichfiles, string nomask, int usesubs)
 		{
 			List<string> sbb = new List<string>();
-			List<string> alldirs = new List<string>(System.IO.Directory.EnumerateDirectories(thispath, "*", System.IO.SearchOption.AllDirectories));
+			List<string> alldirs = null;
+			if (usesubs != 0)
+			{
+				alldirs = new List<string>(System.IO.Directory.EnumerateDirectories(thispath, "*", System.IO.SearchOption.AllDirectories));
+			}
+			else
+			{
+				alldirs = new List<string>();
+			}
 			string[] nochars = nomask.Split("\\".ToCharArray(), System.StringSplitOptions.RemoveEmptyEntries);
 			int foundmatch = 0;
 			alldirs.Add(thispath);
@@ -182,45 +193,48 @@ namespace MusicLibraryMerge
 					System.IO.FileInfo fidestination = new System.IO.FileInfo(thisnewfile);
 					if (fisource.Extension.ToUpper().Equals(".MP3"))
 					{
-						if (fisource.Length == fidestination.Length)
-						{
-							fisource.Delete();
-							retval = "Deleted " + fname;
-						}
-						else
-						{
-							if (fisource.Length < fidestination.Length)
-							{
-								fisource.Delete();
-								retval = "Deleted " + fname;
-							}
-							else
-							{
-								fidestination.Delete();
-								System.IO.File.Move(fname, thisnewfile);
-								retval = "Deleted " + thisnewfile;
-							}
-						}
+						string thisnewfile2 = MakeNextFileName(thisfile);
+						fisource.CopyTo(thisnewfile2);
+						retval = "Copied to " + thisnewfile2;
+						//if (fisource.Length == fidestination.Length)
+						//{
+						//	fisource.Delete();
+						//	retval = "Deleted " + fname;
+						//}
+						//else
+						//{
+						//	if (fisource.Length < fidestination.Length)
+						//	{
+						//		fisource.Delete();
+						//		retval = "Deleted " + fname;
+						//	}
+						//	else
+						//	{
+						//		fidestination.Delete();
+						//		System.IO.File.Move(fname, thisnewfile);
+						//		retval = "Deleted " + thisnewfile;
+						//	}
+						//}
 					}
 					else
 					{
 						if (fisource.Length == fidestination.Length)
 						{
 							fisource.Delete();
-							retval = "Deleted " + fname;
+							retval = "Deleted " + fisource.FullName;
 						}
 						else
 						{
 							if (fisource.Length > fidestination.Length)
 							{
 								fisource.Delete();
-								retval = "Deleted " + fname;
+								retval = "Deleted " + fisource.FullName;
 							}
 							else
 							{
 								fidestination.Delete();
 								System.IO.File.Move(fname, thisnewfile);
-								retval = "Deleted " + thisnewfile;
+								retval = "Replaced " + thisnewfile;
 							}
 						}
 					}
@@ -234,8 +248,94 @@ namespace MusicLibraryMerge
 			}
 			return retval;
 		}
+		public string RemoveTrailingNo(string fname)
+		{
+			string ext = System.IO.Path.GetExtension(fname);
+			string filefullpath = System.IO.Path.GetFullPath(fname);
+			string filepath = System.IO.Path.GetPathRoot(fname);
+			string fulldirname = System.IO.Path.GetDirectoryName(fname);
+			string retval = System.String.Empty;
+			string thisfile = System.IO.Path.GetFileNameWithoutExtension(fname);
+			string thisnewfile = System.String.Empty;
+			int gotnumber = 0;
+			if ((thisfile.LastIndexOf(" ") >= 0) && (int.TryParse(thisfile.Substring(thisfile.LastIndexOf(" ")), out gotnumber)))
+			{
+				thisfile = thisfile.Substring(0, thisfile.LastIndexOf(" ")).Trim();
+				thisnewfile = fulldirname + System.IO.Path.DirectorySeparatorChar + thisfile + ext;
+				if (System.IO.File.Exists(fname))
+				{
+					if (!System.IO.File.Exists(thisnewfile))
+					{
+						System.IO.File.Move(fname, thisnewfile);
+						retval = "Fixed " + thisnewfile;
+					}
+					else
+					{
+						string thisnewfile2 = MakeNextFileName(thisnewfile);
+						System.IO.File.Move(fname, thisnewfile2);
+						retval = "Fixed " + thisnewfile2;
+					}
+				}
+			}
+			else
+			{
+				retval = "Skipped " + fname;
+			}
+			return retval;
+		}
+		public string RemoveLeadingNo(string fname, int maxnumber)
+		{
+			string ext = System.IO.Path.GetExtension(fname);
+			string filefullpath = System.IO.Path.GetFullPath(fname);
+			string filepath = System.IO.Path.GetPathRoot(fname);
+			string fulldirname = System.IO.Path.GetDirectoryName(fname);
+			string retval = System.String.Empty;
+			string thisfile = System.IO.Path.GetFileNameWithoutExtension(fname);
+			string thisnewfile = System.String.Empty;
+			int gotnumber = 0;
+
+			if (thisfile.IndexOf(" ") >= 0)
+			{
+				if (int.TryParse(thisfile.Substring(0, thisfile.IndexOf(" ")), out gotnumber))
+				{
+					if (gotnumber < maxnumber)
+					{
+						thisfile = thisfile.Substring(thisfile.IndexOf(" ")).Trim();
+						thisnewfile = fulldirname + System.IO.Path.DirectorySeparatorChar + thisfile + ext;
+						if (System.IO.File.Exists(fname))
+						{
+							if (!System.IO.File.Exists(thisnewfile))
+							{
+								System.IO.File.Move(fname, thisnewfile);
+								retval = "Fixed " + thisnewfile;
+							}
+							else
+							{
+								string thisnewfile2 = MakeNextFileName(thisnewfile);
+								System.IO.File.Move(fname, thisnewfile2);
+								retval = "Fixed " + thisnewfile2;
+							}
+						}
+					}
+					else
+					{
+						retval = "Number Too High " + fname;
+					}
+				}
+				else
+				{
+					retval = "Skipped " + fname;
+				}
+			}
+			else
+			{
+				retval = "No space " + fname;
+			}
+			return retval;
+		}
 		public string FixDiscFileName(string fname, string mask1)
 		{
+
 			string ext = System.IO.Path.GetExtension(fname);
 			string filefullpath = System.IO.Path.GetFullPath(fname);
 			string filepath = System.IO.Path.GetPathRoot(fname);
@@ -264,15 +364,18 @@ namespace MusicLibraryMerge
 				{
 					System.IO.FileInfo fisource = new System.IO.FileInfo(fname);
 					System.IO.FileInfo fidestination = new System.IO.FileInfo(thisnewfile);
-					if (fisource.Length == fidestination.Length)
-					{
-						fisource.Delete();
-						retval = "Deleted " + fname;
-					}
-					else
-					{
-						retval = "Not Fixed or Deleted " + fname;
-					}
+					string thisnewfile2 = MakeNextFileName(thisnewfile);
+					fisource.CopyTo(thisnewfile2);
+					retval = "Copied to " + thisnewfile2;
+					//if (fisource.Length == fidestination.Length)
+					//{
+					//	fisource.Delete();
+					//	retval = "Deleted " + fname;
+					//}
+					//else
+					//{
+					//	retval = "Not Fixed or Deleted " + fname;
+					//}
 					fisource = null;
 					fidestination = null;
 				}
@@ -314,18 +417,21 @@ namespace MusicLibraryMerge
 				{
 					System.IO.FileInfo fisource = new System.IO.FileInfo(fname);
 					System.IO.FileInfo fidestination = new System.IO.FileInfo(thisnewfile);
+					string thisnewfile2 = MakeNextFileName(thisnewfile);
 					if (fisource.Extension.ToUpper().Equals(".MP3"))
 					{
-						if (fisource.Length <= fidestination.Length)
-						{
-							fisource.Delete();
-							retval = "Deleted " + fisource.FullName;
-						}
-						else
-						{
-							fidestination.Delete();
-							retval = "Deleted " + fidestination.FullName;
-						}
+						fisource.CopyTo(thisnewfile2);
+						retval = "Copied To " + thisnewfile2;
+						//if (fisource.Length <= fidestination.Length)
+						//{
+						//	fisource.Delete();
+						//	retval = "Deleted " + fisource.FullName;
+						//}
+						//else
+						//{
+						//	fidestination.Delete();
+						//	retval = "Deleted " + fidestination.FullName;
+						//}
 					}
 					else
 					{
@@ -377,7 +483,9 @@ namespace MusicLibraryMerge
 			}
 			else
 			{
-				retval = "Skipped2 " + fname;
+				string thisnewfile2 = MakeNextFileName(thisnewfile);
+				System.IO.File.Copy(fname, thisnewfile2);
+				retval = "Copied To" + thisnewfile2;
 			}
 			return retval;
 		}
@@ -421,6 +529,9 @@ namespace MusicLibraryMerge
 			}
 			catch (Exception ee)
 			{
+				filefullpath = System.IO.Path.GetFullPath(fname);
+				filepath = System.IO.Path.GetPathRoot(fname);
+				fulldirname = System.IO.Path.GetDirectoryName(fname);
 				retval = "Error " + fname + ee.Message;
 			}
 			finally
@@ -428,6 +539,49 @@ namespace MusicLibraryMerge
 				// do nothing yet			
 			}
 			return retval;
+		}
+		public string MakeNextFileName(string thisfile)
+		{
+			string nextfilename = System.String.Empty;
+			string dirsepstr = System.IO.Path.DirectorySeparatorChar.ToString();
+			string extsepstr = ".";
+			string ext = System.IO.Path.GetExtension(thisfile);
+			string tmpfilename = System.IO.Path.GetFileNameWithoutExtension(thisfile);
+			//string filefullpath = System.IO.Path.GetFullPath(thisfile);
+			//string filepath = System.IO.Path.GetPathRoot(thisfile);
+			string fulldirname = System.IO.Path.GetDirectoryName(thisfile);
+			string tmpext = System.String.Empty;
+			string tmpfilenamewoext;
+			int tmpextint;
+			if (tmpfilename.LastIndexOf(extsepstr) >= 0)
+			{
+				tmpext = tmpfilename.Substring(tmpfilename.LastIndexOf(extsepstr));
+				tmpfilenamewoext = tmpfilename.Substring(0, tmpfilename.LastIndexOf(extsepstr));
+				if (!int.TryParse(tmpext, out tmpextint))
+				{
+					tmpextint = 0;
+				}
+				//else
+				//{
+				//do
+				//{
+				//	tmpextint += 1;
+				//	nextfilename = tmpfilenamewoext + extsepstr + tmpextint.ToString() + ext;
+				//} while (System.IO.File.Exists(nextfilename));
+				//}
+
+			}
+			else
+			{
+				tmpextint = 0;
+			}
+			do
+			{
+				tmpextint += 1;
+				nextfilename = System.String.Format("{0}{1}{2}{3}{4}{5}", fulldirname, dirsepstr, tmpfilename, extsepstr, tmpextint.ToString(), ext);
+				//nextfilename = fulldirname + dirsepstr +  tmpfilename + extsepstr + tmpextint.ToString() + ext;
+			} while (System.IO.File.Exists(nextfilename));
+			return nextfilename;
 		}
 		~MyDir1()
 		{

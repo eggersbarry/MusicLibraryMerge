@@ -47,11 +47,15 @@
 			this.tignore = new System.Windows.Forms.TextBox();
 			this.tsub = new System.Windows.Forms.TextBox();
 			this.tfind = new System.Windows.Forms.TextBox();
+			this.btnfixdisc = new System.Windows.Forms.Button();
+			this.btn_FillData = new System.Windows.Forms.Button();
+			this.tfirstbetween = new System.Windows.Forms.TextBox();
+			this.tlastbetween = new System.Windows.Forms.TextBox();
+			this.tmaxnumber = new System.Windows.Forms.TextBox();
 			this.btnsecondfolder = new System.Windows.Forms.Button();
 			this.btnMerge = new System.Windows.Forms.Button();
 			this.lblfound = new System.Windows.Forms.Label();
 			this.btnTrim = new System.Windows.Forms.Button();
-			this.btnfixdisc = new System.Windows.Forms.Button();
 			this.btnReplace = new System.Windows.Forms.Button();
 			this.lblmatch = new System.Windows.Forms.Label();
 			this.lblignore = new System.Windows.Forms.Label();
@@ -62,18 +66,22 @@
 			this.btnCopyFiles = new System.Windows.Forms.Button();
 			this.btnAttrib = new System.Windows.Forms.Button();
 			this.btnwhich = new System.Windows.Forms.Button();
-			this.btn_FillData = new System.Windows.Forms.Button();
+			this.btnLeadingNo = new System.Windows.Forms.Button();
+			this.btnRemoveTrailingNos = new System.Windows.Forms.Button();
+			this.lbland = new System.Windows.Forms.Label();
+			this.cb_subs = new System.Windows.Forms.CheckBox();
+			this.cb_copytosubs = new System.Windows.Forms.CheckBox();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// button1
 			// 
 			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button1.Location = new System.Drawing.Point(734, 36);
+			this.button1.Location = new System.Drawing.Point(630, 34);
 			this.button1.Margin = new System.Windows.Forms.Padding(4);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(112, 23);
-			this.button1.TabIndex = 17;
+			this.button1.TabIndex = 6;
 			this.button1.Text = "recursive";
 			this.button1.UseVisualStyleBackColor = true;
 			this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -83,21 +91,22 @@
 			this.rtb1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.rtb1.Location = new System.Drawing.Point(6, 212);
+			this.rtb1.Location = new System.Drawing.Point(6, 275);
 			this.rtb1.Margin = new System.Windows.Forms.Padding(4);
 			this.rtb1.Name = "rtb1";
-			this.rtb1.Size = new System.Drawing.Size(839, 241);
-			this.rtb1.TabIndex = 18;
+			this.rtb1.Size = new System.Drawing.Size(887, 276);
+			this.rtb1.TabIndex = 31;
 			this.rtb1.Text = "";
+			this.rtb1.DoubleClick += new System.EventHandler(this.rtb1_DoubleClick);
 			// 
 			// button2
 			// 
 			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button2.Location = new System.Drawing.Point(734, 63);
+			this.button2.Location = new System.Drawing.Point(630, 61);
 			this.button2.Margin = new System.Windows.Forms.Padding(4);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(112, 23);
-			this.button2.TabIndex = 18;
+			this.button2.TabIndex = 7;
 			this.button2.Text = "non-recursive";
 			this.button2.UseVisualStyleBackColor = true;
 			this.button2.Click += new System.EventHandler(this.button2_Click);
@@ -107,7 +116,7 @@
 			this.btnfirstfolder.Location = new System.Drawing.Point(15, 32);
 			this.btnfirstfolder.Name = "btnfirstfolder";
 			this.btnfirstfolder.Size = new System.Drawing.Size(106, 23);
-			this.btnfirstfolder.TabIndex = 1;
+			this.btnfirstfolder.TabIndex = 2;
 			this.btnfirstfolder.Text = "&Start Folder";
 			this.btnfirstfolder.UseVisualStyleBackColor = true;
 			this.btnfirstfolder.Click += new System.EventHandler(this.btnfirstfolder_Click);
@@ -119,19 +128,19 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tbfirstfolder.Location = new System.Drawing.Point(126, 34);
 			this.tbfirstfolder.Name = "tbfirstfolder";
-			this.tbfirstfolder.Size = new System.Drawing.Size(604, 23);
-			this.tbfirstfolder.TabIndex = 2;
+			this.tbfirstfolder.Size = new System.Drawing.Size(501, 23);
+			this.tbfirstfolder.TabIndex = 3;
 			this.toolTip1.SetToolTip(this.tbfirstfolder, "TopLevel Folder to Start The Search");
 			this.tbfirstfolder.DragDrop += new System.Windows.Forms.DragEventHandler(this.tbfolder_DragDrop);
 			this.tbfirstfolder.DragEnter += new System.Windows.Forms.DragEventHandler(this.tbfolder_DragEnter);
 			// 
 			// btnClose
 			// 
-			this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnClose.Location = new System.Drawing.Point(765, 460);
+			this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnClose.Location = new System.Drawing.Point(813, 243);
 			this.btnClose.Name = "btnClose";
 			this.btnClose.Size = new System.Drawing.Size(75, 25);
-			this.btnClose.TabIndex = 19;
+			this.btnClose.TabIndex = 26;
 			this.btnClose.Text = "E&xit";
 			this.btnClose.UseVisualStyleBackColor = true;
 			this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
@@ -142,8 +151,8 @@
             this.filesToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(852, 24);
-			this.menuStrip1.TabIndex = 8;
+			this.menuStrip1.Size = new System.Drawing.Size(900, 24);
+			this.menuStrip1.TabIndex = 1;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
 			// filesToolStripMenuItem
@@ -192,18 +201,18 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tbsecondfolder.Location = new System.Drawing.Point(126, 63);
 			this.tbsecondfolder.Name = "tbsecondfolder";
-			this.tbsecondfolder.Size = new System.Drawing.Size(604, 23);
-			this.tbsecondfolder.TabIndex = 4;
+			this.tbsecondfolder.Size = new System.Drawing.Size(501, 23);
+			this.tbsecondfolder.TabIndex = 5;
 			this.toolTip1.SetToolTip(this.tbsecondfolder, "TopLevel Folder to Compare to Start Folder for Duplicates");
 			this.tbsecondfolder.DragDrop += new System.Windows.Forms.DragEventHandler(this.tbfolder_DragDrop);
 			this.tbsecondfolder.DragEnter += new System.Windows.Forms.DragEventHandler(this.tbfolder_DragEnter);
 			// 
 			// tmatch
 			// 
-			this.tmatch.Location = new System.Drawing.Point(480, 91);
+			this.tmatch.Location = new System.Drawing.Point(610, 89);
 			this.tmatch.Name = "tmatch";
-			this.tmatch.Size = new System.Drawing.Size(250, 23);
-			this.tmatch.TabIndex = 9;
+			this.tmatch.Size = new System.Drawing.Size(104, 23);
+			this.tmatch.TabIndex = 12;
 			this.toolTip1.SetToolTip(this.tmatch, " Characters to be Replaced\r\nor\r\nAtrributes to be Removed");
 			// 
 			// tignore
@@ -211,15 +220,15 @@
 			this.tignore.Location = new System.Drawing.Point(101, 120);
 			this.tignore.Name = "tignore";
 			this.tignore.Size = new System.Drawing.Size(180, 23);
-			this.tignore.TabIndex = 6;
+			this.tignore.TabIndex = 11;
 			this.toolTip1.SetToolTip(this.tignore, "Characters to be Ignored on Search");
 			// 
 			// tsub
 			// 
-			this.tsub.Location = new System.Drawing.Point(480, 120);
+			this.tsub.Location = new System.Drawing.Point(785, 89);
 			this.tsub.Name = "tsub";
-			this.tsub.Size = new System.Drawing.Size(250, 23);
-			this.tsub.TabIndex = 10;
+			this.tsub.Size = new System.Drawing.Size(104, 23);
+			this.tsub.TabIndex = 13;
 			this.toolTip1.SetToolTip(this.tsub, "Characters to Substitute in on Replacement");
 			// 
 			// tfind
@@ -227,25 +236,72 @@
 			this.tfind.Location = new System.Drawing.Point(101, 91);
 			this.tfind.Name = "tfind";
 			this.tfind.Size = new System.Drawing.Size(180, 23);
-			this.tfind.TabIndex = 5;
+			this.tfind.TabIndex = 10;
 			this.toolTip1.SetToolTip(this.tfind, "Mask to match on Search");
+			// 
+			// btnfixdisc
+			// 
+			this.btnfixdisc.Location = new System.Drawing.Point(523, 150);
+			this.btnfixdisc.Name = "btnfixdisc";
+			this.btnfixdisc.Size = new System.Drawing.Size(72, 25);
+			this.btnfixdisc.TabIndex = 18;
+			this.btnfixdisc.Text = "Fix &Disc";
+			this.toolTip1.SetToolTip(this.btnfixdisc, "17");
+			this.btnfixdisc.UseVisualStyleBackColor = true;
+			this.btnfixdisc.Click += new System.EventHandler(this.btnfixdisc_Click);
+			// 
+			// btn_FillData
+			// 
+			this.btn_FillData.Location = new System.Drawing.Point(12, 242);
+			this.btn_FillData.Name = "btn_FillData";
+			this.btn_FillData.Size = new System.Drawing.Size(123, 25);
+			this.btn_FillData.TabIndex = 23;
+			this.btn_FillData.Text = "Fix &Artists";
+			this.toolTip1.SetToolTip(this.btn_FillData, "13");
+			this.btn_FillData.UseVisualStyleBackColor = true;
+			this.btn_FillData.Click += new System.EventHandler(this.btn_FillData_Click);
+			// 
+			// tfirstbetween
+			// 
+			this.tfirstbetween.Location = new System.Drawing.Point(648, 120);
+			this.tfirstbetween.Name = "tfirstbetween";
+			this.tfirstbetween.Size = new System.Drawing.Size(104, 23);
+			this.tfirstbetween.TabIndex = 15;
+			this.toolTip1.SetToolTip(this.tfirstbetween, " Characters to be Replaced\r\nor\r\nAtrributes to be Removed");
+			// 
+			// tlastbetween
+			// 
+			this.tlastbetween.Location = new System.Drawing.Point(784, 120);
+			this.tlastbetween.Name = "tlastbetween";
+			this.tlastbetween.Size = new System.Drawing.Size(104, 23);
+			this.tlastbetween.TabIndex = 16;
+			this.toolTip1.SetToolTip(this.tlastbetween, " Characters to be Replaced\r\nor\r\nAtrributes to be Removed");
+			// 
+			// tmaxnumber
+			// 
+			this.tmaxnumber.Location = new System.Drawing.Point(667, 214);
+			this.tmaxnumber.Name = "tmaxnumber";
+			this.tmaxnumber.Size = new System.Drawing.Size(47, 23);
+			this.tmaxnumber.TabIndex = 32;
+			this.tmaxnumber.Text = "25";
+			this.toolTip1.SetToolTip(this.tmaxnumber, " Characters to be Replaced\r\nor\r\nAtrributes to be Removed");
 			// 
 			// btnsecondfolder
 			// 
 			this.btnsecondfolder.Location = new System.Drawing.Point(15, 61);
 			this.btnsecondfolder.Name = "btnsecondfolder";
 			this.btnsecondfolder.Size = new System.Drawing.Size(106, 23);
-			this.btnsecondfolder.TabIndex = 3;
+			this.btnsecondfolder.TabIndex = 4;
 			this.btnsecondfolder.Text = "&Dest Folder";
 			this.btnsecondfolder.UseVisualStyleBackColor = true;
 			this.btnsecondfolder.Click += new System.EventHandler(this.btnsecondfolder_Click);
 			// 
 			// btnMerge
 			// 
-			this.btnMerge.Location = new System.Drawing.Point(16, 180);
+			this.btnMerge.Location = new System.Drawing.Point(12, 180);
 			this.btnMerge.Name = "btnMerge";
 			this.btnMerge.Size = new System.Drawing.Size(249, 25);
-			this.btnMerge.TabIndex = 8;
+			this.btnMerge.TabIndex = 25;
 			this.btnMerge.Text = "Copy Files (MP3) &Fix Metadata";
 			this.btnMerge.UseVisualStyleBackColor = true;
 			this.btnMerge.Click += new System.EventHandler(this.btnMerge_Click);
@@ -256,36 +312,25 @@
 			this.lblfound.Location = new System.Drawing.Point(287, 96);
 			this.lblfound.Name = "lblfound";
 			this.lblfound.Size = new System.Drawing.Size(46, 16);
-			this.lblfound.TabIndex = 16;
+			this.lblfound.TabIndex = 29;
 			this.lblfound.Text = "label1";
 			// 
 			// btnTrim
 			// 
-			this.btnTrim.Location = new System.Drawing.Point(406, 180);
+			this.btnTrim.Location = new System.Drawing.Point(439, 150);
 			this.btnTrim.Name = "btnTrim";
 			this.btnTrim.Size = new System.Drawing.Size(75, 25);
-			this.btnTrim.TabIndex = 14;
+			this.btnTrim.TabIndex = 17;
 			this.btnTrim.Text = "&Trim";
 			this.btnTrim.UseVisualStyleBackColor = true;
 			this.btnTrim.Click += new System.EventHandler(this.btnTrim_Click);
 			// 
-			// btnfixdisc
-			// 
-			this.btnfixdisc.Location = new System.Drawing.Point(797, 180);
-			this.btnfixdisc.Name = "btnfixdisc";
-			this.btnfixdisc.Size = new System.Drawing.Size(43, 25);
-			this.btnfixdisc.TabIndex = 17;
-			this.btnfixdisc.Text = "&fix&Disc";
-			this.toolTip1.SetToolTip(this.btnfixdisc, "17");
-			this.btnfixdisc.UseVisualStyleBackColor = true;
-			this.btnfixdisc.Click += new System.EventHandler(this.btnfixdisc_Click);
-			// 
 			// btnReplace
 			// 
-			this.btnReplace.Location = new System.Drawing.Point(406, 149);
+			this.btnReplace.Location = new System.Drawing.Point(439, 88);
 			this.btnReplace.Name = "btnReplace";
 			this.btnReplace.Size = new System.Drawing.Size(75, 25);
-			this.btnReplace.TabIndex = 11;
+			this.btnReplace.TabIndex = 14;
 			this.btnReplace.Text = "&Replace";
 			this.btnReplace.UseVisualStyleBackColor = true;
 			this.btnReplace.Click += new System.EventHandler(this.btnReplace_Click);
@@ -293,19 +338,19 @@
 			// lblmatch
 			// 
 			this.lblmatch.AutoSize = true;
-			this.lblmatch.Location = new System.Drawing.Point(390, 98);
+			this.lblmatch.Location = new System.Drawing.Point(520, 92);
 			this.lblmatch.Name = "lblmatch";
 			this.lblmatch.Size = new System.Drawing.Size(91, 16);
-			this.lblmatch.TabIndex = 20;
+			this.lblmatch.TabIndex = 21;
 			this.lblmatch.Text = "Replace This";
 			// 
 			// lblignore
 			// 
 			this.lblignore.AutoSize = true;
-			this.lblignore.Location = new System.Drawing.Point(411, 127);
+			this.lblignore.Location = new System.Drawing.Point(716, 92);
 			this.lblignore.Name = "lblignore";
 			this.lblignore.Size = new System.Drawing.Size(70, 16);
-			this.lblignore.TabIndex = 21;
+			this.lblignore.TabIndex = 22;
 			this.lblignore.Text = "With This";
 			// 
 			// label1
@@ -314,7 +359,7 @@
 			this.label1.Location = new System.Drawing.Point(15, 127);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(82, 16);
-			this.label1.TabIndex = 25;
+			this.label1.TabIndex = 28;
 			this.label1.Text = "Ignore This";
 			// 
 			// label2
@@ -323,69 +368,114 @@
 			this.label2.Location = new System.Drawing.Point(15, 98);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(67, 16);
-			this.label2.TabIndex = 24;
+			this.label2.TabIndex = 27;
 			this.label2.Text = "Find This";
 			// 
 			// btnRemoveBetween
 			// 
-			this.btnRemoveBetween.Location = new System.Drawing.Point(493, 149);
+			this.btnRemoveBetween.Location = new System.Drawing.Point(439, 119);
 			this.btnRemoveBetween.Name = "btnRemoveBetween";
-			this.btnRemoveBetween.Size = new System.Drawing.Size(139, 25);
-			this.btnRemoveBetween.TabIndex = 12;
-			this.btnRemoveBetween.Text = "&Remove Between";
+			this.btnRemoveBetween.Size = new System.Drawing.Size(203, 25);
+			this.btnRemoveBetween.TabIndex = 17;
+			this.btnRemoveBetween.Text = "&Remove Between (inclusive)";
 			this.btnRemoveBetween.UseVisualStyleBackColor = true;
 			this.btnRemoveBetween.Click += new System.EventHandler(this.btnRemoveBetween_Click);
 			// 
 			// btnemptyfolders
 			// 
-			this.btnemptyfolders.Location = new System.Drawing.Point(492, 180);
+			this.btnemptyfolders.Location = new System.Drawing.Point(439, 181);
 			this.btnemptyfolders.Name = "btnemptyfolders";
 			this.btnemptyfolders.Size = new System.Drawing.Size(180, 25);
-			this.btnemptyfolders.TabIndex = 15;
+			this.btnemptyfolders.TabIndex = 19;
 			this.btnemptyfolders.Text = "Remove &Empty Folders";
 			this.btnemptyfolders.UseVisualStyleBackColor = true;
 			this.btnemptyfolders.Click += new System.EventHandler(this.btnemptyfolders_Click);
 			// 
 			// btnCopyFiles
 			// 
-			this.btnCopyFiles.Location = new System.Drawing.Point(15, 149);
+			this.btnCopyFiles.Location = new System.Drawing.Point(12, 149);
 			this.btnCopyFiles.Name = "btnCopyFiles";
 			this.btnCopyFiles.Size = new System.Drawing.Size(251, 25);
-			this.btnCopyFiles.TabIndex = 7;
+			this.btnCopyFiles.TabIndex = 24;
 			this.btnCopyFiles.Text = "&Copy Files  w/o Metadata";
 			this.btnCopyFiles.UseVisualStyleBackColor = true;
 			this.btnCopyFiles.Click += new System.EventHandler(this.btnCopyFiles_Click);
 			// 
 			// btnAttrib
 			// 
-			this.btnAttrib.Location = new System.Drawing.Point(683, 180);
+			this.btnAttrib.Location = new System.Drawing.Point(12, 211);
 			this.btnAttrib.Name = "btnAttrib";
 			this.btnAttrib.Size = new System.Drawing.Size(111, 25);
-			this.btnAttrib.TabIndex = 16;
-			this.btnAttrib.Text = "Fix &Attributes";
+			this.btnAttrib.TabIndex = 22;
+			this.btnAttrib.Text = "Fix &Attribs";
 			this.btnAttrib.UseVisualStyleBackColor = true;
 			this.btnAttrib.Click += new System.EventHandler(this.btnAttrib_Click);
 			// 
 			// btnwhich
 			// 
-			this.btnwhich.Location = new System.Drawing.Point(736, 89);
+			this.btnwhich.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnwhich.Location = new System.Drawing.Point(749, 32);
 			this.btnwhich.Name = "btnwhich";
-			this.btnwhich.Size = new System.Drawing.Size(112, 42);
-			this.btnwhich.TabIndex = 26;
+			this.btnwhich.Size = new System.Drawing.Size(148, 25);
+			this.btnwhich.TabIndex = 8;
 			this.btnwhich.Text = "Use Dest Folder";
 			this.btnwhich.UseVisualStyleBackColor = true;
 			this.btnwhich.Click += new System.EventHandler(this.btnwhich_Click);
 			// 
-			// btn_FillData
+			// btnLeadingNo
 			// 
-			this.btn_FillData.Location = new System.Drawing.Point(638, 149);
-			this.btn_FillData.Name = "btn_FillData";
-			this.btn_FillData.Size = new System.Drawing.Size(123, 25);
-			this.btn_FillData.TabIndex = 13;
-			this.btn_FillData.Text = "Fix &Artists";
-			this.toolTip1.SetToolTip(this.btn_FillData, "13");
-			this.btn_FillData.UseVisualStyleBackColor = true;
-			this.btn_FillData.Click += new System.EventHandler(this.btn_FillData_Click);
+			this.btnLeadingNo.Location = new System.Drawing.Point(439, 212);
+			this.btnLeadingNo.Name = "btnLeadingNo";
+			this.btnLeadingNo.Size = new System.Drawing.Size(208, 25);
+			this.btnLeadingNo.TabIndex = 21;
+			this.btnLeadingNo.Text = "Remove &Leading No. < max";
+			this.btnLeadingNo.UseVisualStyleBackColor = true;
+			this.btnLeadingNo.Click += new System.EventHandler(this.btnLeadingNo_Click);
+			// 
+			// btnRemoveTrailingNos
+			// 
+			this.btnRemoveTrailingNos.Location = new System.Drawing.Point(439, 243);
+			this.btnRemoveTrailingNos.Name = "btnRemoveTrailingNos";
+			this.btnRemoveTrailingNos.Size = new System.Drawing.Size(166, 25);
+			this.btnRemoveTrailingNos.TabIndex = 20;
+			this.btnRemoveTrailingNos.Text = "Remove &Trailing No.";
+			this.btnRemoveTrailingNos.UseVisualStyleBackColor = true;
+			this.btnRemoveTrailingNos.Click += new System.EventHandler(this.btnRemoveTrailingNos_Click);
+			// 
+			// lbland
+			// 
+			this.lbland.AutoSize = true;
+			this.lbland.Location = new System.Drawing.Point(752, 123);
+			this.lbland.Name = "lbland";
+			this.lbland.Size = new System.Drawing.Size(32, 16);
+			this.lbland.TabIndex = 30;
+			this.lbland.Text = "and";
+			// 
+			// cb_subs
+			// 
+			this.cb_subs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.cb_subs.AutoSize = true;
+			this.cb_subs.Checked = true;
+			this.cb_subs.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cb_subs.Location = new System.Drawing.Point(749, 63);
+			this.cb_subs.Name = "cb_subs";
+			this.cb_subs.Size = new System.Drawing.Size(127, 20);
+			this.cb_subs.TabIndex = 9;
+			this.cb_subs.Text = "use sub folders";
+			this.cb_subs.UseVisualStyleBackColor = true;
+			// 
+			// cb_copytosubs
+			// 
+			this.cb_copytosubs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.cb_copytosubs.AutoSize = true;
+			this.cb_copytosubs.Checked = true;
+			this.cb_copytosubs.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cb_copytosubs.Location = new System.Drawing.Point(267, 166);
+			this.cb_copytosubs.Name = "cb_copytosubs";
+			this.cb_copytosubs.Size = new System.Drawing.Size(155, 20);
+			this.cb_copytosubs.TabIndex = 33;
+			this.cb_copytosubs.Text = "copy to sub folders";
+			this.cb_copytosubs.UseVisualStyleBackColor = true;
 			// 
 			// Form1
 			// 
@@ -393,7 +483,15 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.PaleGoldenrod;
-			this.ClientSize = new System.Drawing.Size(852, 486);
+			this.ClientSize = new System.Drawing.Size(900, 564);
+			this.Controls.Add(this.cb_copytosubs);
+			this.Controls.Add(this.tmaxnumber);
+			this.Controls.Add(this.cb_subs);
+			this.Controls.Add(this.lbland);
+			this.Controls.Add(this.tlastbetween);
+			this.Controls.Add(this.tfirstbetween);
+			this.Controls.Add(this.btnRemoveTrailingNos);
+			this.Controls.Add(this.btnLeadingNo);
 			this.Controls.Add(this.btn_FillData);
 			this.Controls.Add(this.btnwhich);
 			this.Controls.Add(this.btnAttrib);
@@ -472,6 +570,14 @@
 		private System.Windows.Forms.Button btnAttrib;
 		private System.Windows.Forms.Button btnwhich;
 		private System.Windows.Forms.Button btn_FillData;
+		private System.Windows.Forms.Button btnLeadingNo;
+		private System.Windows.Forms.Button btnRemoveTrailingNos;
+		private System.Windows.Forms.TextBox tfirstbetween;
+		private System.Windows.Forms.TextBox tlastbetween;
+		private System.Windows.Forms.Label lbland;
+		private System.Windows.Forms.CheckBox cb_subs;
+		private System.Windows.Forms.TextBox tmaxnumber;
+		private System.Windows.Forms.CheckBox cb_copytosubs;
 	}
 }
 
