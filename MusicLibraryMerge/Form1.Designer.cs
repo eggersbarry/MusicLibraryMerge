@@ -209,6 +209,7 @@
 			// 
 			// tmatch
 			// 
+			this.tmatch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.tmatch.Location = new System.Drawing.Point(610, 89);
 			this.tmatch.Name = "tmatch";
 			this.tmatch.Size = new System.Drawing.Size(104, 23);
@@ -225,6 +226,7 @@
 			// 
 			// tsub
 			// 
+			this.tsub.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.tsub.Location = new System.Drawing.Point(785, 89);
 			this.tsub.Name = "tsub";
 			this.tsub.Size = new System.Drawing.Size(104, 23);
@@ -241,6 +243,7 @@
 			// 
 			// btnfixdisc
 			// 
+			this.btnfixdisc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnfixdisc.Location = new System.Drawing.Point(523, 150);
 			this.btnfixdisc.Name = "btnfixdisc";
 			this.btnfixdisc.Size = new System.Drawing.Size(72, 25);
@@ -263,6 +266,7 @@
 			// 
 			// tfirstbetween
 			// 
+			this.tfirstbetween.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.tfirstbetween.Location = new System.Drawing.Point(648, 120);
 			this.tfirstbetween.Name = "tfirstbetween";
 			this.tfirstbetween.Size = new System.Drawing.Size(104, 23);
@@ -271,6 +275,7 @@
 			// 
 			// tlastbetween
 			// 
+			this.tlastbetween.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.tlastbetween.Location = new System.Drawing.Point(784, 120);
 			this.tlastbetween.Name = "tlastbetween";
 			this.tlastbetween.Size = new System.Drawing.Size(104, 23);
@@ -279,6 +284,7 @@
 			// 
 			// tmaxnumber
 			// 
+			this.tmaxnumber.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.tmaxnumber.Location = new System.Drawing.Point(667, 214);
 			this.tmaxnumber.Name = "tmaxnumber";
 			this.tmaxnumber.Size = new System.Drawing.Size(47, 23);
@@ -317,6 +323,7 @@
 			// 
 			// btnTrim
 			// 
+			this.btnTrim.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnTrim.Location = new System.Drawing.Point(439, 150);
 			this.btnTrim.Name = "btnTrim";
 			this.btnTrim.Size = new System.Drawing.Size(75, 25);
@@ -327,6 +334,7 @@
 			// 
 			// btnReplace
 			// 
+			this.btnReplace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnReplace.Location = new System.Drawing.Point(439, 88);
 			this.btnReplace.Name = "btnReplace";
 			this.btnReplace.Size = new System.Drawing.Size(75, 25);
@@ -337,6 +345,7 @@
 			// 
 			// lblmatch
 			// 
+			this.lblmatch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.lblmatch.AutoSize = true;
 			this.lblmatch.Location = new System.Drawing.Point(520, 92);
 			this.lblmatch.Name = "lblmatch";
@@ -346,6 +355,7 @@
 			// 
 			// lblignore
 			// 
+			this.lblignore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.lblignore.AutoSize = true;
 			this.lblignore.Location = new System.Drawing.Point(716, 92);
 			this.lblignore.Name = "lblignore";
@@ -373,6 +383,7 @@
 			// 
 			// btnRemoveBetween
 			// 
+			this.btnRemoveBetween.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnRemoveBetween.Location = new System.Drawing.Point(439, 119);
 			this.btnRemoveBetween.Name = "btnRemoveBetween";
 			this.btnRemoveBetween.Size = new System.Drawing.Size(203, 25);
@@ -383,6 +394,7 @@
 			// 
 			// btnemptyfolders
 			// 
+			this.btnemptyfolders.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnemptyfolders.Location = new System.Drawing.Point(439, 181);
 			this.btnemptyfolders.Name = "btnemptyfolders";
 			this.btnemptyfolders.Size = new System.Drawing.Size(180, 25);
@@ -424,6 +436,7 @@
 			// 
 			// btnLeadingNo
 			// 
+			this.btnLeadingNo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnLeadingNo.Location = new System.Drawing.Point(439, 212);
 			this.btnLeadingNo.Name = "btnLeadingNo";
 			this.btnLeadingNo.Size = new System.Drawing.Size(208, 25);
@@ -434,6 +447,7 @@
 			// 
 			// btnRemoveTrailingNos
 			// 
+			this.btnRemoveTrailingNos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnRemoveTrailingNos.Location = new System.Drawing.Point(439, 243);
 			this.btnRemoveTrailingNos.Name = "btnRemoveTrailingNos";
 			this.btnRemoveTrailingNos.Size = new System.Drawing.Size(166, 25);
@@ -444,6 +458,7 @@
 			// 
 			// lbland
 			// 
+			this.lbland.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.lbland.AutoSize = true;
 			this.lbland.Location = new System.Drawing.Point(752, 123);
 			this.lbland.Name = "lbland";
@@ -466,7 +481,6 @@
 			// 
 			// cb_copytosubs
 			// 
-			this.cb_copytosubs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.cb_copytosubs.AutoSize = true;
 			this.cb_copytosubs.Checked = true;
 			this.cb_copytosubs.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -482,7 +496,7 @@
 			this.AllowDrop = true;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.BackColor = System.Drawing.Color.PaleGoldenrod;
+			this.BackColor = System.Drawing.Color.LightCoral;
 			this.ClientSize = new System.Drawing.Size(900, 564);
 			this.Controls.Add(this.cb_copytosubs);
 			this.Controls.Add(this.tmaxnumber);

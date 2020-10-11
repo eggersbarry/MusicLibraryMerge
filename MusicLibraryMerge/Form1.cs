@@ -335,45 +335,64 @@ namespace MusicLibraryMerge
 							}
 
 							ID3Class.ID3Data myid3 = new ID3Class.ID3Data(thisfile);
-							myid3.ReadMetaData();
-
-							lclframe = myid3.FindFirstFrame("TALB");// album name
-							if (lclframe == null)
+							if (myid3.ReadMetaData())
 							{
-								lclframe = new ID3Class.ID3Frame(myid3);
-								lclframe.Name = "TALB";
-								myid3.FrameList.Add(lclframe);
-							}
-							lclframe.UnicodeFlag = true;
-							lclframe.ContentString = album;
-							//use the following if you don't want Unicode in the metadata
-							//lclframe.UnicodeFlag = false;
-							//lclframe.ContentBytes = System.Text.Encoding.GetEncoding(myid3.EncodingName).GetBytes("Barry's " + album);
 
-							lclframe = myid3.FindFirstFrame("TIT2"); // Song title
-							if (lclframe == null)
+								lclframe = myid3.FindFirstFrame("TALB");// album name
+								if (lclframe == null)
+								{
+									lclframe = new ID3Class.ID3Frame(myid3);
+									lclframe.Name = "TALB";
+									myid3.FrameList.Add(lclframe);
+								}
+								lclframe.UnicodeFlag = true;
+								lclframe.ContentString = album;
+								//use the following if you don't want Unicode in the metadata
+								//lclframe.UnicodeFlag = false;
+								//lclframe.ContentBytes = System.Text.Encoding.GetEncoding(myid3.EncodingName).GetBytes("Barry's " + album);
+
+								lclframe = myid3.FindFirstFrame("TIT2"); // Song title
+								if (lclframe == null)
+								{
+									lclframe = new ID3Class.ID3Frame(myid3);
+									lclframe.Name = "TIT2";
+									myid3.FrameList.Add(lclframe);
+								}
+								lclframe.UnicodeFlag = true;
+								lclframe.ContentString = songname;
+
+								lclframe = myid3.FindFirstFrame("TPE2");// album artist
+								if (lclframe == null)
+								{
+									lclframe = new ID3Class.ID3Frame(myid3);
+									lclframe.Name = "TPE2";
+									myid3.FrameList.Add(lclframe);
+								}
+								lclframe.UnicodeFlag = true;
+								lclframe.ContentString = artist;
+								newfile = md.MakeNextFileName(newfile);
+								if (myid3.WriteMetaData(newfile))
+								{
+									myid3.CloseFile();
+									sb2.Add("-> Copied " + newfile);
+									copied++;
+								}
+								else
+								{
+									newfile = md.MakeNextFileName(newfile);
+									System.IO.File.Copy(thisfile, newfile);
+								}
+							}
+							else
 							{
-								lclframe = new ID3Class.ID3Frame(myid3);
-								lclframe.Name = "TIT2";
-								myid3.FrameList.Add(lclframe);
+								newfile = md.MakeNextFileName(newfile);
+								System.IO.File.Copy(thisfile, newfile);
 							}
-							lclframe.UnicodeFlag = true;
-							lclframe.ContentString = songname;
-
-							lclframe = myid3.FindFirstFrame("TPE2");// album artist
-							if (lclframe == null)
-							{
-								lclframe = new ID3Class.ID3Frame(myid3);
-								lclframe.Name = "TPE2";
-								myid3.FrameList.Add(lclframe);
-							}
-							lclframe.UnicodeFlag = true;
-							lclframe.ContentString = artist;
-
-							myid3.WriteMetaData(newfile);
-							myid3.CloseFile();
-							sb2.Add("-> Copied " + newfile);
-							copied++;
+						}
+						else
+						{
+							newfile = md.MakeNextFileName(newfile);
+							System.IO.File.Copy(thisfile, newfile);
 						}
 					}
 					else
